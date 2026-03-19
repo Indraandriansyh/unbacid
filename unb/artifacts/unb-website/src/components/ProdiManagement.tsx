@@ -315,7 +315,9 @@ export const PRODI_LIST = [
   { id: "magister-ekonomi-pembangunan-s2", name: "Magister Ekonomi Pembangunan", facultyId: "pps", icon: "🏛️" },
 ];
 
-export default function ProdiManagement({ prodiId }: { prodiId: string }) {
+export type ProdiSection = "informasi" | "banner" | "galeri" | "berita";
+
+export default function ProdiManagement({ prodiId, section }: { prodiId: string; section?: ProdiSection }) {
   const { settings, updateSettings } = useSettings();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
@@ -416,6 +418,7 @@ export default function ProdiManagement({ prodiId }: { prodiId: string }) {
         </div>
       </div>
 
+      {(!section || section === "informasi") && <>
       <Card>
         <CardHeader><CardTitle>Informasi Dasar</CardTitle></CardHeader>
         <CardContent className="space-y-4">
@@ -529,8 +532,9 @@ export default function ProdiManagement({ prodiId }: { prodiId: string }) {
           </Button>
         </CardContent>
       </Card>
+      </>}
 
-      <Card>
+      {(!section || section === "banner") && <Card>
         <CardHeader>
           <CardTitle>Gambar Banner</CardTitle>
           <CardDescription>Gambar atau video yang tampil di bagian atas halaman program studi. Masukkan URL gambar (jpg/png/webp) atau video (mp4).</CardDescription>
@@ -552,9 +556,9 @@ export default function ProdiManagement({ prodiId }: { prodiId: string }) {
             <Plus className="w-4 h-4" /> Tambah Gambar / Video
           </Button>
         </CardContent>
-      </Card>
+      </Card>}
 
-      <Card>
+      {(!section || section === "galeri") && <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
             <Images className="w-5 h-5 text-emerald-500" />
@@ -618,18 +622,22 @@ export default function ProdiManagement({ prodiId }: { prodiId: string }) {
             <Plus className="w-4 h-4" /> Tambah Foto
           </Button>
         </CardContent>
-      </Card>
+      </Card>}
 
-      <div className="flex justify-end">
-        <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2 px-6">
-          {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-          Simpan Perubahan
-        </Button>
-      </div>
+      {section !== "berita" && (
+        <div className="flex justify-end">
+          <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2 px-6">
+            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            Simpan Perubahan
+          </Button>
+        </div>
+      )}
 
-      <div className="border-t border-slate-200 dark:border-slate-700 pt-8">
-        <ProdiNewsSection prodiId={prodiId} prodiName={data.name} />
-      </div>
+      {(!section || section === "berita") && (
+        <div className={section === "berita" ? "" : "border-t border-slate-200 dark:border-slate-700 pt-8"}>
+          <ProdiNewsSection prodiId={prodiId} prodiName={data.name} />
+        </div>
+      )}
     </div>
   );
 }
