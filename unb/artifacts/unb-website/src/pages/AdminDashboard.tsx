@@ -45,6 +45,7 @@ import FakultasManagement from "@/components/FakultasManagement";
 import ProdiManagement, { PRODI_LIST } from "@/components/ProdiManagement";
 import LppmManagement from "@/components/LppmManagement";
 import { LpmManagement } from "@/components/LpmManagement";
+import { BkkManagement } from "@/components/BkkManagement";
 import RegistrationManagement from "@/components/RegistrationManagement";
 import RegistrantsManagement from "@/components/RegistrantsManagement";
 
@@ -140,6 +141,7 @@ export default function AdminDashboard() {
     if (fromMenu) return fromMenu;
     if (activeMenu === "lppm") return "LPPM";
     if (activeMenu === "lpm") return "LPM";
+    if (activeMenu === "bkk") return "BKK";
     if (activeMenu === "pendaftaran") return "Pendaftaran";
     if (activeMenu === "pendaftar") return "Data Pendaftar";
     if (activeMenu.startsWith("fakultas-")) {
@@ -366,6 +368,24 @@ export default function AdminDashboard() {
               <ShieldCheck className={cn("w-5 h-5 shrink-0", activeMenu === "lpm" ? "text-white" : "group-hover:text-emerald-500")} />
               {showSidebarLabels ? <span className="font-semibold flex-1 text-left">LPM</span> : null}
               {showSidebarLabels && activeMenu === "lpm" ? <ChevronRight className="ml-auto w-4 h-4" /> : null}
+            </button>
+
+            {/* ——— BKK ——— */}
+            <button
+              onClick={() => {
+                setActiveMenu("bkk");
+                if (isMobile) setIsSidebarOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group",
+                activeMenu === "bkk"
+                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                  : "hover:bg-emerald-50 dark:hover:bg-emerald-950/30 text-slate-500 dark:text-slate-400"
+              )}
+            >
+              <Users className={cn("w-5 h-5 shrink-0", activeMenu === "bkk" ? "text-white" : "group-hover:text-emerald-500")} />
+              {showSidebarLabels ? <span className="font-semibold flex-1 text-left">BKK</span> : null}
+              {showSidebarLabels && activeMenu === "bkk" ? <ChevronRight className="ml-auto w-4 h-4" /> : null}
             </button>
 
             {/* ——— Pendaftaran ——— */}
@@ -800,6 +820,11 @@ export default function AdminDashboard() {
           {activeMenu === "lpm" && (
             <div className="p-6 md:p-8 max-w-5xl">
               <LpmManagement />
+            </div>
+          )}
+          {activeMenu === "bkk" && (
+            <div className="p-6 md:p-8 max-w-5xl">
+              <BkkManagement />
             </div>
           )}
           {activeMenu === "pendaftaran" && <RegistrationManagement />}

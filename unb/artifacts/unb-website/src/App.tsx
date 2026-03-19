@@ -17,6 +17,7 @@ import { GenericPageTab } from './tabs/GenericPageTab';
 import { PusatStudiAgrataruTab } from './tabs/PusatStudiAgrataruTab';
 import { LppmPageTab } from './tabs/LppmPageTab';
 import { LpmPageTab } from './tabs/LpmPageTab';
+import { BkkPageTab } from './tabs/BkkPageTab';
 import { BooksTab } from './tabs/BooksTab';
 import { Footer } from './components/Footer';
 import { ImageModal } from './components/ImageModal';
@@ -67,8 +68,8 @@ function MainContent() {
 
         {activeTab === 'ejournal' && <GenericPageTab title={t.menu.ejournal} />}
         {activeTab === 'bkk' && <GenericPageTab title={t.menu.bkk} />}
-        {activeTab === 'cooperation' && <GenericPageTab title={t.menu.cooperation} />}
-        {activeTab === 'student_affairs' && <GenericPageTab title={t.menu.student_affairs} />}
+        {activeTab === 'cooperation' && <BkkPageTab pageId="cooperation" />}
+        {activeTab === 'student_affairs' && <BkkPageTab pageId="student_affairs" />}
         {activeTab === 'pusat_studi' && <PusatStudiAgrataruTab />}
 
         {/* Sub-menu Fakultas */}
