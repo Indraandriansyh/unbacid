@@ -25,7 +25,7 @@ type ProdiData = {
   org: OrgItem[];
   curriculum: CurriculumSection[];
   bannerItems: MediaItem[];
-  gallery: GalleryItem[];
+  gallery?: GalleryItem[];
 };
 
 const makeId = () =>

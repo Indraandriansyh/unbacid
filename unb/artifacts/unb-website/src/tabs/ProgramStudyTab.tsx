@@ -568,17 +568,23 @@ export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProp
           </div>
         </div>
 
-        {gallery.length > 0 && (
-          <div className="mt-16">
-            <div className="flex items-end justify-between gap-6 mb-8">
-              <div>
-                <p className="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em]">Dokumentasi</p>
-                <h3 className="text-3xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500 mt-1">
-                  Galeri Kegiatan
-                </h3>
-              </div>
-              <Images className="w-7 h-7 text-emerald-500 shrink-0" />
+        <div className="mt-16">
+          <div className="flex items-end justify-between gap-6 mb-8">
+            <div>
+              <p className="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em]">Dokumentasi</p>
+              <h3 className="text-3xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500 mt-1">
+                Galeri Kegiatan
+              </h3>
             </div>
+            <Images className="w-7 h-7 text-emerald-500 shrink-0" />
+          </div>
+          {gallery.length === 0 ? (
+            <div className="rounded-[30px] border border-dashed border-white/20 bg-white/5 flex flex-col items-center justify-center py-16 px-8 text-center">
+              <Images className="w-12 h-12 text-emerald-500/40 mb-4" />
+              <p className="text-[11px] font-black uppercase tracking-[0.25em] text-gray-400">Belum ada foto galeri</p>
+              <p className="text-[10px] text-gray-500 font-bold mt-2">Tambahkan foto kegiatan melalui halaman admin.</p>
+            </div>
+          ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {gallery.map((item, idx) => (
                 <div
@@ -606,10 +612,10 @@ export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProp
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {prodiNews.length > 0 && !selectedNews && (
+        {!selectedNews && (
           <div className="mt-16">
             <div className="flex items-end justify-between gap-6 mb-8">
               <div>
@@ -619,6 +625,13 @@ export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProp
                 </h3>
               </div>
             </div>
+            {prodiNews.length === 0 ? (
+              <div className="rounded-[30px] border border-dashed border-white/20 bg-white/5 flex flex-col items-center justify-center py-16 px-8 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 text-emerald-500/40 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" /><path strokeLinecap="round" strokeLinejoin="round" d="M13 2v6h6M9 13h6M9 17h4" /></svg>
+                <p className="text-[11px] font-black uppercase tracking-[0.25em] text-gray-400">Belum ada berita / jurnal</p>
+                <p className="text-[10px] text-gray-500 font-bold mt-2">Tambahkan berita atau artikel melalui halaman admin.</p>
+              </div>
+            ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {prodiNews.map((post) => (
                 <div
@@ -662,6 +675,7 @@ export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProp
                 </div>
               ))}
             </div>
+            )}
           </div>
         )}
 
