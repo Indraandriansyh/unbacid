@@ -1,0 +1,14 @@
+packages:
+  "framer-motion": "Smooth tab transitions and floating element animations"
+  "react-hook-form": "Registration form state management"
+  "@hookform/resolvers": "Zod validation integration for forms"
+  "zod": "Strict schema validation for the registration form"
+  "lucide-react": "Beautiful consistent iconography"
+
+images: []
+
+notes:
+  - App is built as a single-page view with state-based tab navigation as requested (NO react-router).
+  - Uses the provided dark mode aesthetic: deep blacks, emerald greens (#10b981), bold italic uppercase typography.
+  - Implements 8 languages via a custom Translation Context.
+  - Uses @workspace/api-client-react generated hooks for the registration endpoint.
