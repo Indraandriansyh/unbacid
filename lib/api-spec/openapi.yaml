@@ -1,0 +1,157 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: UNB University API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: registrations
+    description: Student registration operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /registrations:
+    post:
+      operationId: createRegistration
+      tags: [registrations]
+      summary: Submit new student registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRegistrationInput"
+      responses:
+        "201":
+          description: Registration created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Registration"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    get:
+      operationId: listRegistrations
+      tags: [registrations]
+      summary: List all registrations (admin)
+      responses:
+        "200":
+          description: List of registrations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Registration"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    CreateRegistrationInput:
+      type: object
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        birthDate:
+          type: string
+        address:
+          type: string
+        faculty:
+          type: string
+        program:
+          type: string
+        registrationType:
+          type: string
+          enum: [reguler, jalur_prestasi, jalur_mandiri]
+        message:
+          type: string
+          nullable: true
+      required:
+        - fullName
+        - email
+        - phone
+        - birthDate
+        - address
+        - faculty
+        - program
+        - registrationType
+    Registration:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        birthDate:
+          type: string
+        address:
+          type: string
+        faculty:
+          type: string
+        program:
+          type: string
+        registrationType:
+          type: string
+        message:
+          type: string
+          nullable: true
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - fullName
+        - email
+        - phone
+        - birthDate
+        - address
+        - faculty
+        - program
+        - registrationType
+        - status
+        - createdAt
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: object
+          nullable: true
+      required:
+        - error

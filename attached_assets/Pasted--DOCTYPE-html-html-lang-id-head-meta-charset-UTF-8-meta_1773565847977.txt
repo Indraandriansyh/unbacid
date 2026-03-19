@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Nusa Bangsa - UNB Bogor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus+Jakarta+Sans', sans-serif;
+            background-color: #0d0d0d;
+            color: #ffffff;
+            padding: 10px;
+        }
+        @media (min-width: 768px) {
+            body { padding: 20px; }
+        }
+        .main-container {
+            background-color: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            max-width: 950px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            min-height: 90vh;
+        }
+        @media (min-width: 768px) {
+            .main-container { border-radius: 40px; }
+        }
+        .text-outline {
+            -webkit-text-stroke: 1.5px #10b981;
+            color: transparent;
+        }
+        @media (min-width: 768px) {
+            .text-outline { -webkit-text-stroke: 2px #10b981; }
+        }
+        
+        .hero-heading {
+            font-size: clamp(2.4rem, 10vw, 5.5rem);
+            line-height: 0.9;
+            letter-spacing: -0.05em;
+        }
+        
+        /* Animasi Mengambang */
+        @keyframes float { 0%, 100% { transform: translateY(0px) rotate(-12deg); } 50% { transform: translateY(-10px) rotate(-10deg); } }
+        @keyframes float-alt { 0%, 100% { transform: translateY(0px) rotate(12deg); } 50% { transform: translateY(-15px) rotate(15deg); } }
+        @keyframes float-plane { 0%, 100% { transform: translate(0px, 0px) rotate(-45deg); } 50% { transform: translate(10px, -10px) rotate(-35deg); } }
+
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-float-slow { animation: float-alt 6s ease-in-out infinite; }
+        .animate-float-plane { animation: float-plane 5s ease-in-out infinite; }
+
+        .glass-element {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            border-radius: 22px;
+        }
+
+        /* Desain Kartu Paket / Akademik */
+        .new-package-card {
+            background: #ffffff;
+            border-radius: 32px;
+            color: #1a1a1a;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 400px;
+            min-width: 280px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            position: relative;
+        }
+        @media (min-width: 768px) {
+            .new-package-card { padding: 32px; min-height: 420px; }
+        }
+        .new-package-card.vip { 
+            background: #10b981; 
+            box-shadow: 0 15px 30px -10px rgba(16, 185, 129, 0.3);
+        }
+        
+        .package-container {
+            padding-top: 30px; 
+            padding-bottom: 30px;
+        }
+        
+        .arrow-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #10b981;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+        .new-package-card:hover .arrow-btn { transform: rotate(45deg); }
+        .vip .arrow-btn { background: black; color: #10b981; }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .page { display: none; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .nav-link.active { color: #ffffff; border-bottom: 2px solid #10b981; }
+
+        .video-overlay {
+            background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        /* Modal Detail Gambar */
+        .detail-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .detail-modal.active { display: flex; animation: fadeIn 0.3s ease; }
+        
+        .modal-content-img {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* CTA Cards Style */
+        .cta-card {
+            border-radius: 35px;
+            padding: 40px;
+            height: 100%;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-card:hover { transform: scale(1.02); }
+
+        /* Blog Card Style */
+        .blog-card {
+            background: #222222;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .blog-card:hover { border-color: #10b981; transform: translateY(-5px); }
+
+        /* Prodi List Style */
+        .prodi-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #4b5563; /* gray-600 */
+        }
+        .prodi-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #10b981; /* emerald-500 */
+        }
+        .vip .prodi-list li { color: rgba(0,0,0,0.7); }
+        .vip .prodi-list li::before { color: #000; }
+    </style>
+</head>
+<body class="md:py-10">
+
+    <div class="main-container shadow-2xl">
+        <!-- Navigasi Utama -->
+        <nav class="grid grid-cols-2 lg:grid-cols-3 items-center px-6 md:px-8 py-6 sticky top-0 bg-[#1a1a1a]/90 backdrop-blur-md z-50 border-b border-white/5">
+            <!-- Kiri: Logo -->
+            <div class="flex items-center gap-2 cursor-pointer justify-self-start" onclick="showPage('home')">
+                <div class="w-7 h-7 md:w-8 md:h-8 border-2 border-white rounded-lg flex items-center justify-center font-black italic text-[10px] md:text-xs">UNB</div>
+                <span class="font-bold text-[10px] tracking-tighter uppercase">Univ. Nusa Bangsa</span>
+            </div>
+
+            <!-- Tengah: Menu Navigasi -->
+            <div class="hidden lg:flex gap-6 text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400 justify-self-center">
+                <button onclick="showPage('home')" class="nav-link transition py-1 active" id="nav-home">Beranda</button>
+                <button onclick="showPage('tentang')" class="nav-link transition py-1" id="nav-tentang">Tentang Kami</button>
+                <button onclick="showPage('fakultas')" class="nav-link transition py-1" id="nav-fakultas">Fakultas & Prodi</button>
+                <button onclick="showPage('pendaftaran')" class="nav-link transition py-1" id="nav-pendaftaran">Pendaftaran</button>
+                <button onclick="showPage('blog')" class="nav-link transition py-1" id="nav-blog">Berita</button>
+            </div>
+
+            <!-- Kanan: Tombol Kontak/Daftar -->
+            <div class="flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.2em] justify-self-end">
+                <button onclick="showPage('pendaftaran')" class="bg-emerald-500 text-white rounded-full px-5 py-2.5 flex items-center gap-2 hover:bg-emerald-400 transition" id="nav-kontak">
+                    Daftar <span class="hidden sm:inline">Sekarang</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- HALAMAN BERANDA -->
+        <div id="home" class="page active">
+            <!-- Hero Section -->
+            <section class="px-4 md:px-6 pt-12 md:pt-20 pb-12 relative flex flex-col items-center">
+                <div class="w-full text-center relative z-10 px-4">
+                    <!-- FDE Elements -->
+                    <div class="absolute -top-10 left-[5%] md:left-[15%] z-20 animate-float">
+                        <div class="glass-element w-12 h-12 md:w-16 md:h-16 bg-emerald-500/25 flex items-center justify-center text-2xl md:text-4xl shadow-xl">🎓</div>
+                    </div>
+                    <div class="absolute top-0 right-[8%] md:right-[18%] z-20 animate-float-slow">
+                        <div class="glass-element w-10 h-10 md:w-14 md:h-14 bg-white/10 flex items-center justify-center text-xl md:text-3xl shadow-xl">💡</div>
+                    </div>
+                    <div class="absolute top-[80px] md:top-[125px] left-[18%] md:left-[24%] z-20 animate-float-plane">
+                        <div class="glass-element w-12 h-12 md:w-16 md:h-16 bg-emerald-500/20 flex items-center justify-center text-2xl md:text-4xl shadow-emerald-500/30 shadow-2xl">🌱</div>
+                    </div>
+
+                    <h1 class="hero-heading font-black uppercase italic relative z-10 px-2">
+                        <span class="text-outline block mb-2 md:mb-4">#UNBBOGOR</span>
+                        UNIVERSITAS<br>
+                        <span class="text-white">NUSA BANGSA</span>
+                    </h1>
+
+                    <div class="mt-12 md:mt-20 flex flex-col sm:flex-row items-center justify-between w-full max-w-4xl mx-auto gap-8 md:gap-10">
+                        <div class="text-[8px] md:text-[9px] uppercase font-bold tracking-[0.2em] text-gray-500 leading-relaxed text-center sm:text-left">
+                            Membangun Sumber Daya Manusia<br>Berkualitas & Berintegritas Sejak 1987<br>
+                            <span class="text-white text-[10px] md:text-xs">Terakreditasi BAN-PT</span><br>
+                            <span class="text-white text-[10px] md:text-xs">Program S1 & Pascasarjana</span>
+                        </div>
+                        <button onclick="showPage('fakultas')" class="w-full sm:w-auto bg-transparent border border-white/30 rounded-full px-8 md:px-10 py-3 md:py-4 flex items-center justify-center gap-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] hover:bg-emerald-500 hover:border-emerald-500 hover:text-white transition-all group">
+                            Jelajahi Program
+                            <div class="bg-white text-black rounded-full p-1 md:p-1.5 group-hover:bg-black group-hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Images Grid -->
+                <div class="grid grid-cols-3 gap-3 md:gap-6 mt-16 md:mt-24 w-full px-2 md:px-4 max-w-5xl">
+                    <div class="aspect-[3/4.5] rounded-[20px] md:rounded-[35px] overflow-hidden bg-gray-800 shadow-lg cursor-pointer" onclick="openDetail('https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200')">
+                        <img src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700" alt="Gedung Kampus">
+                    </div>
+                    <div class="aspect-[3/5.5] -mt-8 md:-mt-16 rounded-[20px] md:rounded-[35px] overflow-hidden border-2 border-emerald-500/40 bg-gray-800 z-10 shadow-2xl cursor-pointer" onclick="openDetail('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200')">
+                        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700" alt="Mahasiswa">
+                    </div>
+                    <div class="aspect-[3/4.5] rounded-[20px] md:rounded-[35px] overflow-hidden bg-gray-800 shadow-lg cursor-pointer" onclick="openDetail('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200')">
+                        <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700" alt="Perpustakaan">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call to Action -->
+            <section class="px-6 md:px-10 pb-20 pt-16">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center bg-[#151515] p-8 md:p-12 rounded-[40px] border border-white/5 shadow-2xl relative overflow-hidden">
+                    <!-- Background Glow Effect -->
+                    <div class="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+                    
+                    <!-- Left Content -->
+                    <div class="relative z-10">
+                        <h2 class="text-5xl md:text-[5.5rem] font-black italic uppercase tracking-tighter leading-[0.85] mb-6">
+                            <span class="text-outline block mb-2">PENERIMAAN</span>
+                            <span class="text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">MAHASISWA BARU</span>
+                        </h2>
+                        <p class="text-[9px] md:text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-10 leading-relaxed">
+                            BANGUN KARIR IMPIANMU DAN JADILAH PEMIMPIN MASA DEPAN BERSAMA UNIVERSITAS NUSA BANGSA.
+                        </p>
+
+                        <div class="space-y-6">
+                            <!-- Feature 1 -->
+                            <div class="flex gap-5 items-start">
+                                <div class="w-10 h-10 rounded-full border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center shrink-0 text-emerald-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-black italic uppercase text-white mb-1 tracking-wider">BEASISWA PENDIDIKAN</h4>
+                                    <p class="text-[9px] text-gray-400 font-bold uppercase leading-relaxed tracking-wider">Tersedia program beasiswa penuh dan parsial bagi mahasiswa berprestasi dan jalur afirmasi.</p>
+                                </div>
+                            </div>
+                            <!-- Feature 2 -->
+                            <div class="flex gap-5 items-start">
+                                <div class="w-10 h-10 rounded-full border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center shrink-0 text-emerald-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-black italic uppercase text-white mb-1 tracking-wider">FASILITAS MODERN</h4>
+                                    <p class="text-[9px] text-gray-400 font-bold uppercase leading-relaxed tracking-wider">Akses laboratorium riset terkini, perpustakaan digital, dan fasilitas olahraga berstandar tinggi.</p>
+                                </div>
+                            </div>
+                            <!-- Feature 3 -->
+                            <div class="flex gap-5 items-start">
+                                <div class="w-10 h-10 rounded-full border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center shrink-0 text-emerald-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-black italic uppercase text-white mb-1 tracking-wider">KARIR GLOBAL</h4>
+                                    <p class="text-[9px] text-gray-400 font-bold uppercase leading-relaxed tracking-wider">Jaringan alumni yang kuat dan kemitraan strategis dengan berbagai perusahaan multinasional.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="mt-10 bg-emerald-500 hover:bg-emerald-400 text-white px-8 py-3.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition duration-300 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center gap-3" onclick="showPage('pendaftaran')">
+                            DAFTAR SEKARANG 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+
+                    <!-- Right Image Area -->
+                    <div class="relative w-full aspect-square md:aspect-[4/5] lg:aspect-square lg:max-w-md mx-auto mt-10 lg:mt-0">
+                        <div class="w-full h-full rounded-[40px] overflow-hidden border border-white/10 bg-[#0d0d0d] relative shadow-2xl">
+                            <!-- Abstract tech overlay -->
+                            <img src="https://images.unsplash.com/photo-1618044733300-9472054094ee?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 mix-blend-lighten transition duration-700 hover:scale-105" alt="Abstract 3D Shape">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-transparent mix-blend-overlay"></div>
+                        </div>
+
+                        <!-- Floating Element 1 (Top Left) -->
+                        <div class="absolute -top-6 -left-4 md:-left-12 glass-element bg-black/60 border border-white/10 rounded-2xl px-6 py-4 shadow-2xl backdrop-blur-xl animate-float">
+                            <h4 class="text-3xl md:text-5xl font-black italic text-emerald-500 tracking-tighter drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">15,000+</h4>
+                            <p class="text-[8px] font-bold text-gray-300 uppercase tracking-widest mt-1">MAHASISWA AKTIF</p>
+                        </div>
+
+                        <!-- Floating Element 2 (Bottom Right) -->
+                        <div class="absolute -bottom-6 -right-4 md:-right-8 glass-element bg-black/60 border border-white/10 rounded-2xl px-5 py-4 shadow-2xl backdrop-blur-xl flex flex-col items-center animate-float-slow">
+                            <div class="flex gap-1 text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </div>
+                            <p class="text-[8px] font-bold text-gray-300 uppercase tracking-widest mt-2">KAMPUS UNGGULAN</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- HALAMAN TENTANG KAMI -->
+        <div id="tentang" class="page">
+            <section class="px-6 md:px-12 py-16">
+                <!-- Header -->
+                <div class="mb-16">
+                    <h2 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">TENTANG KAMI</h2>
+                    <p class="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em] mt-2">Mengenal Universitas Nusa Bangsa Lebih Dekat</p>
+                </div>
+
+                <!-- Visi Misi & Sejarah -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start mb-20">
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-2xl font-black italic uppercase mb-4 text-emerald-500">Sejarah Kampus</h3>
+                            <p class="text-xs text-gray-400 leading-loose">
+                                Universitas Nusa Bangsa (UNB) didirikan pada tahun 1987 oleh Yayasan Pengembangan Keterampilan dan Mutu Kehidupan (YPKMK) Nusantara yang berkedudukan di Jakarta. UNB terus bertransformasi untuk menyelenggarakan pendidikan bermutu tinggi dengan biaya terjangkau demi memajukan sumber daya manusia bangsa Indonesia yang tangguh, cerdas, dan bermoral.
+                            </p>
+                        </div>
+                        <div class="p-6 border border-emerald-500/20 rounded-[30px] bg-emerald-500/5 relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 text-7xl opacity-10">🌟</div>
+                            <h3 class="text-xl font-black italic uppercase mb-3">Visi Kami</h3>
+                            <p class="text-[11px] text-gray-300 font-bold leading-relaxed tracking-wider uppercase">Menjadi Perguruan Tinggi yang Unggul, Berkarakter, dan Berdaya Saing dalam Pengembangan Ilmu Pengetahuan, Teknologi, dan Seni (IPTEKS) Berbasis Pengelolaan Lingkungan Tahun 2030.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black italic uppercase mb-3">Misi Kami</h3>
+                            <ul class="text-[11px] text-gray-400 font-bold leading-relaxed tracking-wider uppercase space-y-3 list-disc list-inside marker:text-emerald-500">
+                                <li>Menyelenggarakan Tridharma Perguruan Tinggi (Pendidikan, Penelitian, dan Pengabdian).</li>
+                                <li>Menghasilkan lulusan yang kompeten, beretika, dan berjiwa wirausaha.</li>
+                                <li>Membangun kemitraan strategis dengan institusi dalam dan luar negeri untuk mendukung pembangunan berkelanjutan.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="aspect-[4/5] rounded-[40px] overflow-hidden border-2 border-white/10 relative group">
+                            <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700" alt="Kampus">
+                            <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black via-black/80 to-transparent">
+                                <p class="text-white font-black italic text-2xl uppercase">Kampus UNB Bogor</p>
+                                <p class="text-emerald-500 font-bold text-[10px] uppercase tracking-widest mt-1">Jl. KH. Sholeh Iskandar KM.4</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fasilitas Kampus -->
+                <div>
+                    <h3 class="text-3xl font-black italic uppercase mb-8 text-center">Fasilitas Kampus</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-[#222] rounded-[30px] p-4 border border-white/5 group hover:border-emerald-500/50 transition">
+                            <div class="aspect-video rounded-[20px] overflow-hidden mb-4">
+                                <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            </div>
+                            <h4 class="font-black italic uppercase px-2">Perpustakaan Universitas</h4>
+                            <p class="text-[10px] text-gray-500 px-2 mt-1 font-bold">Koleksi buku, e-journal, dan fasilitas pendukung tugas akhir mahasiswa.</p>
+                        </div>
+                        <div class="bg-[#222] rounded-[30px] p-4 border border-white/5 group hover:border-emerald-500/50 transition">
+                            <div class="aspect-video rounded-[20px] overflow-hidden mb-4">
+                                <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            </div>
+                            <h4 class="font-black italic uppercase px-2">Laboratorium Terpadu</h4>
+                            <p class="text-[10px] text-gray-500 px-2 mt-1 font-bold">Fasilitas lab untuk Fakultas Kehutanan, Pertanian, FMIPA, & FEB.</p>
+                        </div>
+                        <div class="bg-[#222] rounded-[30px] p-4 border border-white/5 group hover:border-emerald-500/50 transition">
+                            <div class="aspect-video rounded-[20px] overflow-hidden mb-4">
+                                <img src="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            </div>
+                            <h4 class="font-black italic uppercase px-2">Sistem Informasi Akademik</h4>
+                            <p class="text-[10px] text-gray-500 px-2 mt-1 font-bold">Layanan SIMAK UNB terintegrasi untuk kemudahan akses KRS/KHS Online.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Struktur Organisasi -->
+                <div class="mt-24">
+                    <h3 class="text-3xl font-black italic uppercase mb-12 text-center">Struktur Manajemen</h3>
+                    
+                    <!-- Rektor -->
+                    <div class="flex justify-center mb-8 md:mb-0 relative">
+                        <div class="bg-[#1a1a1a] border border-emerald-500/40 shadow-xl shadow-emerald-500/10 rounded-[30px] p-6 text-center w-full md:w-72 relative z-10 hover:border-emerald-500 transition-colors">
+                            <div class="w-16 h-16 mx-auto bg-emerald-500/20 rounded-full flex items-center justify-center text-2xl mb-4 border border-emerald-500/50">🎓</div>
+                            <h4 class="font-black italic uppercase text-sm text-white">Rektorat UNB</h4>
+                            <p class="text-[9px] text-emerald-500 font-bold uppercase tracking-widest mt-1">Pimpinan Universitas</p>
+                        </div>
+                        <!-- Garis vertikal penghubung (Desktop) -->
+                        <div class="hidden md:block absolute top-[100%] left-1/2 w-px h-10 bg-emerald-500/40 -translate-x-1/2"></div>
+                    </div>
+
+                    <!-- Garis horizontal penghubung (Desktop) -->
+                    <div class="hidden md:block w-2/3 h-px bg-emerald-500/40 mx-auto relative mt-10">
+                        <div class="absolute top-0 left-0 w-px h-8 bg-emerald-500/40"></div>
+                        <div class="absolute top-0 left-1/2 w-px h-8 bg-emerald-500/40 -translate-x-1/2"></div>
+                        <div class="absolute top-0 right-0 w-px h-8 bg-emerald-500/40"></div>
+                    </div>
+
+                    <!-- Wakil Rektor -->
+                    <div class="flex flex-col md:flex-row justify-center gap-6 md:gap-0 md:justify-between max-w-4xl mx-auto pt-0 md:pt-8">
+                        <!-- Warek 1 -->
+                        <div class="bg-[#222] border border-white/10 rounded-[30px] p-6 text-center w-full md:w-[28%] hover:border-emerald-500/50 transition-colors relative">
+                            <div class="w-12 h-12 mx-auto bg-white/5 rounded-full flex items-center justify-center text-xl mb-4">📚</div>
+                            <h4 class="font-black italic uppercase text-xs text-white">Wakil Rektor I</h4>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">Bidang Akademik</p>
+                        </div>
+                        <!-- Warek 2 -->
+                        <div class="bg-[#222] border border-white/10 rounded-[30px] p-6 text-center w-full md:w-[28%] hover:border-emerald-500/50 transition-colors relative">
+                            <div class="w-12 h-12 mx-auto bg-white/5 rounded-full flex items-center justify-center text-xl mb-4">💼</div>
+                            <h4 class="font-black italic uppercase text-xs text-white">Wakil Rektor II</h4>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">Bidang Keuangan & SDM</p>
+                        </div>
+                        <!-- Warek 3 -->
+                        <div class="bg-[#222] border border-white/10 rounded-[30px] p-6 text-center w-full md:w-[28%] hover:border-emerald-500/50 transition-colors relative">
+                            <div class="w-12 h-12 mx-auto bg-white/5 rounded-full flex items-center justify-center text-xl mb-4">🏆</div>
+                            <h4 class="font-black italic uppercase text-xs text-white">Wakil Rektor III</h4>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">Bidang Kemahasiswaan</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- HALAMAN FAKULTAS & PRODI -->
+        <div id="fakultas" class="page bg-[#151515]">
+            <section class="px-6 md:px-12 py-16">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                    <div>
+                        <h2 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">FAKULTAS & PRODI</h2>
+                        <p class="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em] mt-2">Pilihan Program Studi Universitas Nusa Bangsa</p>
+                    </div>
+                    <p class="max-w-[350px] text-[9px] uppercase font-bold text-gray-500 tracking-[0.1em] leading-relaxed">
+                        FAKULTAS DAN PROGRAM STUDI YANG DIDESAIN UNTUK MEMBANGUN SUMBER DAYA MANUSIA BERKUALITAS, TANGGUH, DAN BERINTEGRITAS TINGGI.
+                    </p>
+                </div>
+
+                <!-- Info MIPA & Tab -->
+                <div class="mb-10">
+                    <p class="text-xs text-gray-400 mb-6 max-w-2xl leading-relaxed">UNB Bogor memiliki 4 Fakultas Unggulan (Strata-1) dan Sekolah Pascasarjana (Magister). Termasuk didalamnya <strong>Fakultas Sains dan Teknologi (MIPA)</strong> dengan Program Studi Biologi dan Kimia.</p>
+                    <div class="flex gap-4 overflow-x-auto hide-scrollbar">
+                        <button class="px-6 py-2 rounded-full bg-emerald-500 text-white font-bold text-[10px] uppercase tracking-widest shrink-0">Program Sarjana (S1)</button>
+                        <button class="px-6 py-2 rounded-full border border-white/20 text-gray-400 font-bold text-[10px] uppercase tracking-widest hover:border-emerald-500 hover:text-white transition shrink-0">Pascasarjana (S2)</button>
+                    </div>
+                </div>
+
+                <!-- Daftar Fakultas Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Card Fakultas 1 -->
+                    <div class="new-package-card shadow-lg hover:-translate-y-4">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-2xl font-black italic uppercase leading-none">FAKULTAS<br>AGROTEKNOPRENEUR</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-2xl">🌾</div>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-500 mb-3">Fakultas Pertanian (S1):</p>
+                            <ul class="prodi-list">
+                                <li>Agroteknologi (S-1)</li>
+                                <li>Agribisnis (S-1)</li>
+                            </ul>
+                            <p class="text-[10px] text-gray-600 font-bold mt-4 line-clamp-3">Membangun sektor pertanian sebagai dasar pengembangan ilmu dengan wawasan agroteknopreneur & agraria.</p>
+                        </div>
+                        <button class="w-full py-3 mt-6 border-2 border-black rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition">Selengkapnya</button>
+                    </div>
+
+                    <!-- Card Fakultas 2 -->
+                    <div class="new-package-card vip shadow-2xl shadow-emerald-500/20 hover:-translate-y-4">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-2xl font-black italic uppercase leading-none text-black">EKONOMI &<br>BISNIS</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-black/10 flex items-center justify-center text-2xl">📈</div>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-black mb-3">Fakultas Ekonomi (S1):</p>
+                            <ul class="prodi-list">
+                                <li>Manajemen (S-1)</li>
+                                <li>Akuntansi (S-1)</li>
+                            </ul>
+                            <p class="text-[10px] text-gray-800 font-bold mt-4 line-clamp-3">Pengembangan ilmu pengetahuan dalam bidang manajemen strategis dan sistem akuntansi di era industri modern.</p>
+                        </div>
+                        <button class="w-full py-3 mt-6 bg-black text-emerald-500 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-900 transition">Selengkapnya</button>
+                    </div>
+
+                    <!-- Card Fakultas 3 -->
+                    <div class="new-package-card shadow-lg hover:-translate-y-4">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-2xl font-black italic uppercase leading-none">KEHUTANAN &<br>LINGKUNGAN</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-2xl">🌲</div>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-500 mb-3">Fakultas Kehutanan (S1):</p>
+                            <ul class="prodi-list">
+                                <li>Kehutanan (S-1)</li>
+                                <li style="list-style-type: none; padding-left: 0;" class="text-[9px] text-gray-400 font-normal italic mt-1">- Konservasi SDH & Ekowisata</li>
+                                <li style="list-style-type: none; padding-left: 0;" class="text-[9px] text-gray-400 font-normal italic">- Manajemen Hutan</li>
+                            </ul>
+                            <p class="text-[10px] text-gray-600 font-bold mt-4 line-clamp-3">Membangun sumberdaya manusia berkualitas dalam pengelolaan hutan lestari & berbasis ekosistem.</p>
+                        </div>
+                        <button class="w-full py-3 mt-6 border-2 border-black rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition">Selengkapnya</button>
+                    </div>
+                </div>
+
+                <!-- Info Pascasarjana Banner -->
+                <div class="mt-16 bg-zinc-800 border border-white/10 rounded-[40px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-1/2 h-full bg-emerald-500/10 blur-3xl rounded-full"></div>
+                    <div class="relative z-10 w-full md:w-2/3">
+                        <h3 class="text-2xl md:text-3xl font-black italic uppercase mb-2">Program Magister (Pascasarjana)</h3>
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-4">Program Unggulan yang ditawarkan UNB Bogor:</p>
+                        <ul class="text-sm font-bold text-white space-y-2 mb-4 list-disc list-inside marker:text-emerald-500">
+                            <li>Magister Ilmu Ekonomi (S-2)</li>
+                            <li>Magister Pembangunan Wilayah dan Perdesaan (S-2)</li>
+                            <li>Magister Ilmu Kehutanan (S-2)</li>
+                        </ul>
+                    </div>
+                    <button class="bg-emerald-500 text-white px-8 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap z-10 hover:bg-emerald-400 transition shadow-xl">Informasi S2</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- HALAMAN PENDAFTARAN (PMB) -->
+        <div id="pendaftaran" class="page">
+            <section class="px-6 md:px-12 py-16">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">PENDAFTARAN MAHASISWA BARU</h2>
+                    <p class="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em] mt-2">Universitas Nusa Bangsa Bogor</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <!-- Kiri: Informasi, Jalur & Biaya -->
+                    <div class="space-y-12">
+                        <!-- Jalur Pendaftaran -->
+                        <div>
+                            <h3 class="text-2xl font-black italic uppercase mb-6 flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-sm text-white not-italic">1</span> Jalur Masuk Kelas Reguler & Karyawan
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="bg-[#222] p-5 rounded-2xl border border-white/5 border-l-4 border-l-emerald-500">
+                                    <h4 class="font-bold uppercase text-sm text-white">Kelas A (Reguler / Utama)</h4>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wide mt-1">Perkuliahan reguler pada hari Senin - Jumat. Cocok bagi lulusan baru SMA/SMK sederajat.</p>
+                                </div>
+                                <div class="bg-[#222] p-5 rounded-2xl border border-white/5">
+                                    <h4 class="font-bold uppercase text-sm text-white">Kelas B (Karyawan / Eksekutif)</h4>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wide mt-1">Perkuliahan diselenggarakan Jumat Sore & Sabtu. Terbuka bagi pekerja/karyawan yang ingin melanjutkan pendidikan.</p>
+                                </div>
+                                <div class="bg-[#222] p-5 rounded-2xl border border-white/5">
+                                    <h4 class="font-bold uppercase text-sm text-white">Pendaftaran Jalur Pindahan/Lanjutan</h4>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wide mt-1">Menerima mahasiswa pindahan atau lanjutan D3 ke S1 sesuai dengan konversi SKS.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Keunggulan Singkat -->
+                        <div>
+                            <h3 class="text-2xl font-black italic uppercase mb-6 flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-sm text-white not-italic">2</span> Keunggulan UNB
+                            </h3>
+                            <ul class="text-[11px] text-gray-400 font-bold leading-relaxed tracking-wider uppercase space-y-3 list-disc list-inside marker:text-emerald-500">
+                                <li>Biaya Pendidikan Terjangkau & Bisa Dicicil</li>
+                                <li>Dosen Berkualitas (Minimal Lulusan S2 & S3)</li>
+                                <li>Akreditasi Institusi "Baik Sekali" oleh BAN-PT</li>
+                                <li>Lokasi Kampus Strategis di Kota Bogor</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Kanan: Form Pendaftaran -->
+                    <div class="bg-[#1a1a1a] rounded-[40px] p-8 md:p-10 border border-emerald-500/30 shadow-2xl shadow-emerald-500/10 relative">
+                        <div class="absolute -top-6 -right-6 animate-float">
+                            <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center text-3xl shadow-lg border-4 border-[#1a1a1a]">📝</div>
+                        </div>
+                        <h3 class="text-2xl font-black italic uppercase mb-2 text-white">Form Minat PMB Online</h3>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-8">Daftar sekarang untuk mendapatkan panduan administrasi dari tim Admisi UNB.</p>
+                        
+                        <form onsubmit="event.preventDefault(); alert('Pendaftaran Berhasil! Tim Admisi UNB akan segera menghubungi Anda.');" class="space-y-5">
+                            <div>
+                                <label class="block text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Nama Lengkap Sesuai Ijazah</label>
+                                <input type="text" placeholder="Masukkan Nama Lengkap" required class="w-full bg-black/50 border border-white/10 rounded-2xl px-5 py-3.5 text-xs font-bold focus:border-emerald-500 outline-none text-white transition">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Email Aktif</label>
+                                    <input type="email" placeholder="contoh@email.com" required class="w-full bg-black/50 border border-white/10 rounded-2xl px-5 py-3.5 text-xs font-bold focus:border-emerald-500 outline-none text-white transition">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-2">No. WhatsApp</label>
+                                    <input type="tel" placeholder="0812-XXXX-XXXX" required class="w-full bg-black/50 border border-white/10 rounded-2xl px-5 py-3.5 text-xs font-bold focus:border-emerald-500 outline-none text-white transition">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Pilihan Program Studi</label>
+                                <select required class="w-full bg-black/50 border border-white/10 rounded-2xl px-5 py-3.5 text-xs font-bold focus:border-emerald-500 outline-none text-white appearance-none cursor-pointer">
+                                    <option value="" disabled selected>Pilih Program Studi...</option>
+                                    <optgroup label="Fakultas Kehutanan">
+                                        <option value="kh">Kehutanan (S1)</option>
+                                    </optgroup>
+                                    <optgroup label="Fakultas Pertanian">
+                                        <option value="agro">Agroteknologi (S1)</option>
+                                        <option value="agri">Agribisnis (S1)</option>
+                                    </optgroup>
+                                    <optgroup label="Fakultas Ekonomi & Bisnis">
+                                        <option value="mnj">Manajemen (S1)</option>
+                                        <option value="akt">Akuntansi (S1)</option>
+                                    </optgroup>
+                                    <optgroup label="Fakultas Sains & Teknologi">
+                                        <option value="bio">Biologi (S1)</option>
+                                        <option value="kim">Kimia (S1)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="pt-4">
+                                <button type="submit" class="w-full bg-emerald-500 text-white rounded-2xl py-4 text-[11px] font-black uppercase tracking-[0.2em] hover:bg-emerald-400 hover:-translate-y-1 transition duration-300 shadow-xl shadow-emerald-500/20">Daftar Sekarang</button>
+                            </div>
+                            <p class="text-center text-[8px] font-bold text-gray-500 mt-4 uppercase tracking-widest">Informasi lengkap rincian SPP dan cicilan akan dikirim via Email.</p>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- HALAMAN BERITA / BLOG -->
+        <div id="blog" class="page bg-[#151515]">
+            <section class="px-6 md:px-12 py-16">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                    <div>
+                        <h2 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">BERITA KAMPUS</h2>
+                        <p class="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em] mt-2">Seputar Universitas Nusa Bangsa</p>
+                    </div>
+                </div>
+
+                <!-- Featured Post -->
+                <div class="relative w-full aspect-[21/9] min-h-[300px] rounded-[40px] overflow-hidden group cursor-pointer border border-white/10 mb-12">
+                    <img src="https://images.unsplash.com/photo-1544928147-79a2dbc1f389?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt="Seminar Keuangan">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-8 md:p-12">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="bg-emerald-500 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest">Berita Utama</span>
+                            <span class="text-[10px] font-bold text-gray-300 uppercase tracking-widest drop-shadow-md">Terkini</span>
+                        </div>
+                        <h3 class="text-2xl md:text-4xl font-black italic uppercase leading-tight text-white tracking-tighter max-w-3xl mb-4">Gandeng Pegadaian, FEB UNB Bogor Gelar Seminar Literasi Keuangan Bagi Mahasiswa</h3>
+                        <p class="text-xs md:text-sm text-gray-300 font-bold max-w-2xl line-clamp-2">Fakultas Ekonomi & Bisnis Universitas Nusa Bangsa melaksanakan kegiatan seminar edukasi untuk meningkatkan pemahaman mahasiswa mengenai inklusi keuangan serta perencanaan masa depan secara mandiri...</p>
+                    </div>
+                </div>
+
+                <!-- Blog Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Post 1 -->
+                    <div class="blog-card group cursor-pointer">
+                        <div class="h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="News">
+                        </div>
+                        <div class="p-8">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="bg-blue-500 text-white text-[8px] font-bold px-3 py-1 rounded-full uppercase">Fakultas MIPA</span>
+                            </div>
+                            <h3 class="text-lg font-black italic uppercase leading-tight mb-4 tracking-tighter">Selamat dan Sukses untuk Pencapaian Akreditasi FMIPA UNB</h3>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-relaxed line-clamp-3">Semoga Program Studi Kimia dan Biologi dapat mempertahankan prestasi sesuai akreditasi yang telah didapatkan, serta dapat meningkatkan prestasinya di kemudian hari untuk UNB unggul...</p>
+                        </div>
+                    </div>
+                    <!-- Post 2 -->
+                    <div class="blog-card group cursor-pointer">
+                        <div class="h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Tips">
+                        </div>
+                        <div class="p-8">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="bg-orange-500 text-white text-[8px] font-bold px-3 py-1 rounded-full uppercase">Pengabdian</span>
+                            </div>
+                            <h3 class="text-lg font-black italic uppercase leading-tight mb-4 tracking-tighter">Mahasiswa UNB Edukasi Lingkungan & Buat Rumah Baca di Desa Pasir Eurih</h3>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-relaxed line-clamp-3">Sebagai wujud implementasi Tri Dharma Perguruan Tinggi, mahasiswa UNB menyelenggarakan Kuliah Kerja Nyata Tematik (KKNT) dengan berinteraksi langsung memajukan lingkungan masyarakat...</p>
+                        </div>
+                    </div>
+                    <!-- Post 3 -->
+                    <div class="blog-card group cursor-pointer">
+                        <div class="h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Story">
+                        </div>
+                        <div class="p-8">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="bg-purple-500 text-white text-[8px] font-bold px-3 py-1 rounded-full uppercase">Edukasi</span>
+                            </div>
+                            <h3 class="text-lg font-black italic uppercase leading-tight mb-4 tracking-tighter">UNB Gelar Festival Guna Mengedukasi Pelajar Terkait Keanekaragaman Satwa</h3>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-relaxed line-clamp-3">Kegiatan rutin yang dimotori oleh Fakultas Kehutanan dan instansi terkait untuk memberikan pemahaman secara langsung mengenai pelestarian lingkungan serta satwa di alam liar...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 text-center">
+                    <button class="border border-white/20 text-white px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition">Buka Portal Berita Lengkap</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- MODAL DETAIL GAMBAR -->
+        <div id="image-modal" class="detail-modal" onclick="closeDetail()">
+            <button onclick="closeDetail()" class="absolute top-8 right-8 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-emerald-500 transition-colors z-[210]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <img id="modal-img" src="" class="modal-content-img" onclick="event.stopPropagation()">
+        </div>
+
+        <!-- FOOTER UTAMA -->
+        <footer class="max-w-[950px] mx-auto mt-12 mb-8 px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 py-10 border-t border-white/5 text-gray-400 text-[10px] font-bold uppercase tracking-widest">
+                <!-- Kolom 1 -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-6 h-6 border-2 border-emerald-500 text-emerald-500 rounded flex items-center justify-center font-black italic text-[8px]">UNB</div>
+                        <span class="text-white text-xs">UNIVERSITAS NUSA BANGSA BOGOR</span>
+                    </div>
+                    <p class="mb-2">📍 Jl. KH. Sholeh Iskandar KM.4, Tanah Sareal, Kota Bogor 16166</p>
+                    <p class="mb-2">📞 (0251) 7533189</p>
+                    <p>✉️ nusabangsa@unb.ac.id</p>
+                </div>
+                <!-- Kolom 2 -->
+                <div>
+                    <h4 class="text-white mb-4">Navigasi Cepat</h4>
+                    <ul class="space-y-2">
+                        <li><button onclick="showPage('tentang')" class="hover:text-emerald-500 transition">Tentang Kami</button></li>
+                        <li><button onclick="showPage('fakultas')" class="hover:text-emerald-500 transition">Fakultas & Prodi</button></li>
+                        <li><button onclick="showPage('pendaftaran')" class="hover:text-emerald-500 transition">Pendaftaran</button></li>
+                        <li><button onclick="showPage('blog')" class="hover:text-emerald-500 transition">Berita Kampus</button></li>
+                    </ul>
+                </div>
+                <!-- Kolom 3 -->
+                <div>
+                    <h4 class="text-white mb-4">Portal Resmi</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://unb.ac.id" target="_blank" class="hover:text-emerald-500 transition">Website UNB (unb.ac.id)</a></li>
+                        <li><a href="#" class="hover:text-emerald-500 transition">Sistem Informasi (SIMAK)</a></li>
+                        <li><a href="#" class="hover:text-emerald-500 transition">E-Journal UNB</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center pt-8 border-t border-white/5 text-[8px] text-gray-600">
+                &copy; 2026 UNIVERSITAS NUSA BANGSA. ALL RIGHTS RESERVED.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Fungsi navigasi SPA (Single Page Application)
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            const activeNav = document.getElementById('nav-' + pageId);
+            if (activeNav) activeNav.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openDetail(img) {
+            document.getElementById('modal-img').src = img;
+            document.getElementById('image-modal').classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeDetail() {
+            document.getElementById('image-modal').classList.remove('active');
+            document.body.style.overflow = 'auto'; 
+        }
+    </script>
+</body>
+</html>
