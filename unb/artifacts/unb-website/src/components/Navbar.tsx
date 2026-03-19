@@ -58,7 +58,7 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             { label: t.menu.spmi, id: 'spmi' },
           ]
         },
-        { label: t.menu.ejournal, id: 'ejournal' },
+        { label: t.menu.ejournal, id: 'ejournal', url: 'https://ejournalunb.ac.id/' },
         { 
           label: t.menu.bkk,
           id: 'bkk',
@@ -162,7 +162,7 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
           ) : (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => (item as any).url ? window.open((item as any).url, '_blank', 'noopener,noreferrer') : setActiveTab(item.id as TabType)}
               className={`nav-link transition py-1 whitespace-nowrap ${activeTab === item.id ? 'nav-link-active' : 'hover:text-black dark:hover:text-white'}`}
             >
               {item.label}
@@ -310,7 +310,7 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                   ) : (
                     <button
                       key={item.id}
-                      onClick={() => handleTabClick(item.id)}
+                      onClick={() => (item as any).url ? window.open((item as any).url, '_blank', 'noopener,noreferrer') : handleTabClick(item.id as TabType)}
                       className={`w-full text-left px-5 py-3 text-[9px] font-bold tracking-[0.2em] uppercase transition-colors ${
                         activeTab === item.id ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
                       }`}
