@@ -173,9 +173,11 @@ export default function RegistrantsManagement() {
                   <th className="px-4 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Fakultas / Prodi</th>
                   <th className="px-4 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Jalur</th>
                   <th className="px-4 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Metode Bayar</th>
-                  <th className="px-4 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Status Bayar</th>
-                  <th className="px-4 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Tanggal Daftar</th>
-                  <th className="px-4 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Ubah Status</th>
+                  <th className="px-4 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">
+                    Status Bayar
+                    <span className="ml-1 text-[8px] font-normal normal-case text-slate-300">(klik untuk ubah)</span>
+                  </th>
+                  <th className="px-4 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Tanggal</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-white/5">
@@ -183,7 +185,6 @@ export default function RegistrantsManagement() {
                   const statusCfg = STATUS_CONFIG[reg.paymentStatus as PaymentStatus] ?? STATUS_CONFIG.unpaid;
                   const methodCfg = reg.paymentMethod ? METHOD_CONFIG[reg.paymentMethod] : null;
                   const isMidtrans = reg.paymentMethod === "midtrans";
-                  const StatusIcon = statusCfg.icon;
                   const createdDate = new Date(reg.createdAt).toLocaleDateString("id-ID", {
                     day: "2-digit", month: "short", year: "numeric"
                   });
@@ -219,17 +220,19 @@ export default function RegistrantsManagement() {
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border ${statusCfg.color}`}>
-                          <StatusIcon className="w-3 h-3" />
-                          {statusCfg.label}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-[10px] text-slate-400 whitespace-nowrap">{createdDate}</td>
-                      <td className="px-4 py-3">
-                        {isMidtrans ? (
-                          <span className="text-[9px] text-slate-300 italic">Auto (Midtrans)</span>
-                        ) : updatingId === reg.id ? (
-                          <Loader2 className="w-4 h-4 animate-spin text-emerald-500" />
+                        {updatingId === reg.id ? (
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border ${statusCfg.color}`}>
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                            Menyimpan...
+                          </span>
+                        ) : isMidtrans ? (
+                          <div className="space-y-1">
+                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border ${statusCfg.color}`}>
+                              {(() => { const I = statusCfg.icon; return <I className="w-3 h-3" />; })()}
+                              {statusCfg.label}
+                            </span>
+                            <p className="text-[9px] text-slate-400 italic">Auto via Midtrans</p>
+                          </div>
                         ) : (
                           <StatusDropdown
                             current={reg.paymentStatus as PaymentStatus}
@@ -237,6 +240,7 @@ export default function RegistrantsManagement() {
                           />
                         )}
                       </td>
+                      <td className="px-4 py-3 text-[10px] text-slate-400 whitespace-nowrap">{createdDate}</td>
                     </tr>
                   );
                 })}
