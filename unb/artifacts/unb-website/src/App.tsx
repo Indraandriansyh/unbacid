@@ -15,6 +15,8 @@ import { RegistrationTab } from './tabs/RegistrationTab';
 import { NewsTab } from './tabs/NewsTab';
 import { GenericPageTab } from './tabs/GenericPageTab';
 import { PusatStudiAgrataruTab } from './tabs/PusatStudiAgrataruTab';
+import { LppmPageTab } from './tabs/LppmPageTab';
+import { BooksTab } from './tabs/BooksTab';
 import { Footer } from './components/Footer';
 import { ImageModal } from './components/ImageModal';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -46,14 +48,14 @@ function MainContent() {
         {activeTab === 'blog' && <NewsTab />}
         {activeTab === 'layanan' && <NewsTab />}
 
-        {/* Sub-menu Tentang */}
+        {/* Sub-menu LPPM */}
         {activeTab === 'lppm' && <GenericPageTab title={t.menu.lppm} />}
-        {activeTab === 'penelitian' && <GenericPageTab title={t.menu.penelitian} />}
-        {activeTab === 'pengabdian' && <GenericPageTab title={t.menu.pengabdian} />}
-        {activeTab === 'inovasi' && <GenericPageTab title={t.menu.inovasi} />}
-        {activeTab === 'haki' && <GenericPageTab title={t.menu.haki} />}
-        {activeTab === 'books' && <GenericPageTab title={t.menu.books} />}
-        {activeTab === 'seminar' && <GenericPageTab title={t.menu.seminar} />}
+        {activeTab === 'penelitian' && <LppmPageTab pageId="penelitian" />}
+        {activeTab === 'pengabdian' && <LppmPageTab pageId="pengabdian" />}
+        {activeTab === 'inovasi' && <LppmPageTab pageId="inovasi" />}
+        {activeTab === 'haki' && <LppmPageTab pageId="haki" />}
+        {activeTab === 'books' && <BooksTab />}
+        {activeTab === 'seminar' && <LppmPageTab pageId="seminar" />}
         
         {activeTab === 'lpm' && <GenericPageTab title={t.menu.lpm} />}
         {activeTab === 'sop' && <GenericPageTab title={t.menu.sop} />}

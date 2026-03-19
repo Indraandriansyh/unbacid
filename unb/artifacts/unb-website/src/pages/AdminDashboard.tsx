@@ -30,7 +30,8 @@ import {
   Trash2,
   Loader2,
   GraduationCap,
-  BookOpen
+  BookOpen,
+  FlaskConical
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -40,6 +41,7 @@ import DataDosenManagement from "@/components/DataDosenManagement.tsx";
 import NewsManagement from "@/components/NewsManagement";
 import FakultasManagement from "@/components/FakultasManagement";
 import ProdiManagement, { PRODI_LIST } from "@/components/ProdiManagement";
+import LppmManagement from "@/components/LppmManagement";
 
 const FAKULTAS_LIST = [
   { id: "faa", label: "Agroteknopreneur", icon: "🌾" },
@@ -131,6 +133,7 @@ export default function AdminDashboard() {
   const getActiveMenuLabel = () => {
     const fromMenu = menuItems.find((x) => x.id === activeMenu)?.label;
     if (fromMenu) return fromMenu;
+    if (activeMenu === "lppm") return "LPPM";
     if (activeMenu.startsWith("fakultas-")) {
       const id = activeMenu.replace("fakultas-", "");
       const f = FAKULTAS_LIST.find(f => f.id === id);
@@ -321,6 +324,23 @@ export default function AdminDashboard() {
                 </div>
               )}
             </div>
+            {/* ——— LPPM ——— */}
+            <button
+              onClick={() => {
+                setActiveMenu("lppm");
+                if (isMobile) setIsSidebarOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group",
+                activeMenu === "lppm"
+                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                  : "hover:bg-emerald-50 dark:hover:bg-emerald-950/30 text-slate-500 dark:text-slate-400"
+              )}
+            >
+              <FlaskConical className={cn("w-5 h-5 shrink-0", activeMenu === "lppm" ? "text-white" : "group-hover:text-emerald-500")} />
+              {showSidebarLabels ? <span className="font-semibold flex-1 text-left">LPPM</span> : null}
+              {showSidebarLabels && activeMenu === "lppm" ? <ChevronRight className="ml-auto w-4 h-4" /> : null}
+            </button>
           </nav>
 
           <div className="p-4 border-t border-emerald-50 dark:border-emerald-900/10">
@@ -714,6 +734,7 @@ export default function AdminDashboard() {
           {activeMenu === "profile" && <ProfileManagement />}
           {activeMenu === "data-dosen" && <DataDosenManagement />}
           {activeMenu === "news" && <NewsManagement />}
+          {activeMenu === "lppm" && <LppmManagement />}
 
           {/* Fakultas pages */}
           {FAKULTAS_LIST.map(f =>
