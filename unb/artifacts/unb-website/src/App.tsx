@@ -16,6 +16,7 @@ import { NewsTab } from './tabs/NewsTab';
 import { GenericPageTab } from './tabs/GenericPageTab';
 import { PusatStudiAgrataruTab } from './tabs/PusatStudiAgrataruTab';
 import { LppmPageTab } from './tabs/LppmPageTab';
+import { LpmPageTab } from './tabs/LpmPageTab';
 import { BooksTab } from './tabs/BooksTab';
 import { Footer } from './components/Footer';
 import { ImageModal } from './components/ImageModal';
@@ -58,11 +59,11 @@ function MainContent() {
         {activeTab === 'seminar' && <LppmPageTab pageId="seminar" />}
         
         {activeTab === 'lpm' && <GenericPageTab title={t.menu.lpm} />}
-        {activeTab === 'sop' && <GenericPageTab title={t.menu.sop} />}
-        {activeTab === 'jobs' && <GenericPageTab title={t.menu.jobs} />}
-        {activeTab === 'performance' && <GenericPageTab title={t.menu.performance} />}
-        {activeTab === 'tracer' && <GenericPageTab title={t.menu.tracer} />}
-        {activeTab === 'spmi' && <GenericPageTab title={t.menu.spmi} />}
+        {activeTab === 'sop' && <LpmPageTab pageId="sop" />}
+        {activeTab === 'jobs' && <LpmPageTab pageId="jobs" />}
+        {activeTab === 'performance' && <LpmPageTab pageId="performance" />}
+        {activeTab === 'tracer' && <LpmPageTab pageId="tracer" />}
+        {activeTab === 'spmi' && <LpmPageTab pageId="spmi" />}
 
         {activeTab === 'ejournal' && <GenericPageTab title={t.menu.ejournal} />}
         {activeTab === 'bkk' && <GenericPageTab title={t.menu.bkk} />}
