@@ -32,7 +32,8 @@ import {
   GraduationCap,
   BookOpen,
   FlaskConical,
-  ClipboardList
+  ClipboardList,
+  Users2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -44,6 +45,7 @@ import FakultasManagement from "@/components/FakultasManagement";
 import ProdiManagement, { PRODI_LIST } from "@/components/ProdiManagement";
 import LppmManagement from "@/components/LppmManagement";
 import RegistrationManagement from "@/components/RegistrationManagement";
+import RegistrantsManagement from "@/components/RegistrantsManagement";
 
 const FAKULTAS_LIST = [
   { id: "faa", label: "Agroteknopreneur", icon: "🌾" },
@@ -137,6 +139,7 @@ export default function AdminDashboard() {
     if (fromMenu) return fromMenu;
     if (activeMenu === "lppm") return "LPPM";
     if (activeMenu === "pendaftaran") return "Pendaftaran";
+    if (activeMenu === "pendaftar") return "Data Pendaftar";
     if (activeMenu.startsWith("fakultas-")) {
       const id = activeMenu.replace("fakultas-", "");
       const f = FAKULTAS_LIST.find(f => f.id === id);
@@ -361,6 +364,24 @@ export default function AdminDashboard() {
               <ClipboardList className={cn("w-5 h-5 shrink-0", activeMenu === "pendaftaran" ? "text-white" : "group-hover:text-emerald-500")} />
               {showSidebarLabels ? <span className="font-semibold flex-1 text-left">Pendaftaran</span> : null}
               {showSidebarLabels && activeMenu === "pendaftaran" ? <ChevronRight className="ml-auto w-4 h-4" /> : null}
+            </button>
+
+            {/* ——— Data Pendaftar ——— */}
+            <button
+              onClick={() => {
+                setActiveMenu("pendaftar");
+                if (isMobile) setIsSidebarOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group",
+                activeMenu === "pendaftar"
+                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                  : "hover:bg-emerald-50 dark:hover:bg-emerald-950/30 text-slate-500 dark:text-slate-400"
+              )}
+            >
+              <Users2 className={cn("w-5 h-5 shrink-0", activeMenu === "pendaftar" ? "text-white" : "group-hover:text-emerald-500")} />
+              {showSidebarLabels ? <span className="font-semibold flex-1 text-left">Data Pendaftar</span> : null}
+              {showSidebarLabels && activeMenu === "pendaftar" ? <ChevronRight className="ml-auto w-4 h-4" /> : null}
             </button>
           </nav>
 
@@ -757,6 +778,11 @@ export default function AdminDashboard() {
           {activeMenu === "news" && <NewsManagement />}
           {activeMenu === "lppm" && <LppmManagement />}
           {activeMenu === "pendaftaran" && <RegistrationManagement />}
+          {activeMenu === "pendaftar" && (
+            <div className="p-6 md:p-8 max-w-7xl">
+              <RegistrantsManagement />
+            </div>
+          )}
 
           {/* Fakultas pages */}
           {FAKULTAS_LIST.map(f =>

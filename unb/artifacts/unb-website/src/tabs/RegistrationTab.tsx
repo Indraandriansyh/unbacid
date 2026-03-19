@@ -7,6 +7,7 @@ import { useCreateRegistration } from '../hooks/use-registrations';
 import { useToast } from '@/hooks/use-toast';
 import { useSettings } from '@/contexts/SettingsContext';
 import { MediaBanner } from '../components/MediaBanner';
+import PaymentModal from '../components/PaymentModal';
 import { 
   UserCheck, 
   FileEdit, 
@@ -187,6 +188,7 @@ export function RegistrationTab() {
   const { settings } = useSettings();
   const createRegistration = useCreateRegistration();
   const [selectedDetail, setSelectedDetail] = useState<{title: string, desc: string, sub?: string} | null>(null);
+  const [pendingPayment, setPendingPayment] = useState<{ id: number; name: string } | null>(null);
 
   const regContent = useMemo<RegistrationContent>(() => {
     const saved = (settings as any).registrationContent;
@@ -214,13 +216,11 @@ export function RegistrationTab() {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await createRegistration.mutateAsync({ data });
-      toast({
-        title: t.register.success,
-        description: t.register.successDesc,
-        className: "bg-emerald-500 border-none text-white font-bold shadow-2xl"
-      });
+      const result = await createRegistration.mutateAsync({ data });
       reset();
+      // Open payment modal
+      const reg = result as any;
+      setPendingPayment({ id: reg.id, name: data.fullName });
     } catch {
       toast({
         title: t.register.error,
@@ -228,6 +228,18 @@ export function RegistrationTab() {
         variant: "destructive"
       });
     }
+  };
+
+  const handlePaymentClose = () => {
+    setPendingPayment(null);
+  };
+
+  const handlePaymentComplete = () => {
+    toast({
+      title: "Pendaftaran Berhasil!",
+      description: "Terima kasih! Pendaftaran Anda sedang diproses. Kami akan menghubungi Anda segera.",
+      className: "bg-emerald-500 border-none text-white font-bold shadow-2xl"
+    });
   };
 
   const inputCls = "w-full bg-white dark:bg-[#0d0d0d] border border-black/10 dark:border-white/10 rounded-2xl px-5 py-3.5 text-sm font-medium text-black dark:text-white focus:outline-none focus:border-emerald-500 transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-600 transition-colors duration-500";
@@ -615,6 +627,16 @@ export function RegistrationTab() {
           </div>
         </div>
       </section>
+
+      {/* Payment Modal */}
+      {pendingPayment && (
+        <PaymentModal
+          registrationId={pendingPayment.id}
+          registrantName={pendingPayment.name}
+          onClose={handlePaymentClose}
+          onPaymentComplete={handlePaymentComplete}
+        />
+      )}
 
       {/* Detail Modal */}
       <Dialog open={!!selectedDetail} onOpenChange={() => setSelectedDetail(null)}>

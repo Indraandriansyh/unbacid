@@ -14,12 +14,20 @@ export const registrationsTable = pgTable("registrations", {
   registrationType: text("registration_type").notNull(),
   message: text("message"),
   status: text("status").notNull().default("pending"),
+  paymentMethod: text("payment_method"),
+  paymentStatus: text("payment_status").notNull().default("unpaid"),
+  midtransOrderId: text("midtrans_order_id"),
+  midtransPaymentType: text("midtrans_payment_type"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const insertRegistrationSchema = createInsertSchema(registrationsTable).omit({
   id: true,
   status: true,
+  paymentMethod: true,
+  paymentStatus: true,
+  midtransOrderId: true,
+  midtransPaymentType: true,
   createdAt: true,
 });
 

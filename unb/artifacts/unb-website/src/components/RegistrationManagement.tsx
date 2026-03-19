@@ -7,7 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useSettings } from "@/contexts/SettingsContext";
 import {
   Plus, Trash2, Loader2, Save, Upload, Link as LinkIcon,
-  MessageCircle, FileText, DollarSign, Clock, Users, ArrowUpDown, Image as ImageIcon
+  MessageCircle, FileText, DollarSign, Clock, Users, ArrowUpDown, Image as ImageIcon,
+  CreditCard, Building2, ToggleLeft, ToggleRight, Info
 } from "lucide-react";
 import { MediaItemRow } from "./MediaUploader";
 import {
@@ -47,9 +48,33 @@ const SECTION_TABS = [
   { id: "waves", label: "Waktu Pendaftaran", icon: Clock },
   { id: "tuition", label: "Biaya Pendidikan", icon: DollarSign },
   { id: "contact", label: "Formulir & Kontak", icon: MessageCircle },
+  { id: "payment", label: "Pengaturan Bayar", icon: CreditCard },
 ] as const;
 
 type TabId = typeof SECTION_TABS[number]["id"];
+
+const DEFAULT_PAYMENT_SETTINGS = {
+  midtransEnabled: false,
+  midtransClientKey: "",
+  midtransIsProduction: false,
+  bankName: "BJB Syariah",
+  bankAccountNumber: "0040102001205",
+  bankAccountName: "Universitas Nusa Bangsa",
+  registrationFee: 300000,
+};
+
+function getPaymentSettings(settings: any) {
+  const ps = settings?.paymentSettings ?? {};
+  return {
+    midtransEnabled: ps.midtransEnabled === true,
+    midtransClientKey: ps.midtransClientKey ?? "",
+    midtransIsProduction: ps.midtransIsProduction === true,
+    bankName: ps.bankName ?? DEFAULT_PAYMENT_SETTINGS.bankName,
+    bankAccountNumber: ps.bankAccountNumber ?? DEFAULT_PAYMENT_SETTINGS.bankAccountNumber,
+    bankAccountName: ps.bankAccountName ?? DEFAULT_PAYMENT_SETTINGS.bankAccountName,
+    registrationFee: typeof ps.registrationFee === "number" ? ps.registrationFee : DEFAULT_PAYMENT_SETTINGS.registrationFee,
+  };
+}
 
 function getRegistrationContent(settings: any): RegistrationContent {
   const saved = settings?.registrationContent;
@@ -72,6 +97,8 @@ export default function RegistrationManagement() {
   const [activeTab, setActiveTab] = useState<TabId>("banner");
   const [content, setContent] = useState<RegistrationContent>(DEFAULT_REGISTRATION_CONTENT);
   const [isSaving, setIsSaving] = useState(false);
+  const [paymentSettings, setPaymentSettings] = useState(DEFAULT_PAYMENT_SETTINGS);
+  const [isSavingPayment, setIsSavingPayment] = useState(false);
 
   const brochureFileRef = useRef<HTMLInputElement>(null);
   const formFileRef = useRef<HTMLInputElement>(null);
@@ -80,6 +107,7 @@ export default function RegistrationManagement() {
 
   useEffect(() => {
     setContent(getRegistrationContent(settings));
+    setPaymentSettings(getPaymentSettings(settings));
   }, [settings]);
 
   const handleSave = async () => {
@@ -91,6 +119,18 @@ export default function RegistrationManagement() {
       toast({ variant: "destructive", title: "Gagal Menyimpan" });
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleSavePayment = async () => {
+    try {
+      setIsSavingPayment(true);
+      await updateSettings("paymentSettings", paymentSettings);
+      toast({ title: "Tersimpan", description: "Pengaturan pembayaran berhasil diperbarui." });
+    } catch {
+      toast({ variant: "destructive", title: "Gagal Menyimpan" });
+    } finally {
+      setIsSavingPayment(false);
     }
   };
 
@@ -217,6 +257,162 @@ export default function RegistrationManagement() {
           onUploadForm={() => formFileRef.current?.click()}
           isUploadingForm={isUploadingForm}
         />
+      )}
+
+      {/* ─── Pengaturan Bayar ─── */}
+      {activeTab === "payment" && (
+        <div className="space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold">Pengaturan Pembayaran</h3>
+              <p className="text-sm text-slate-500">Atur metode pembayaran yang tersedia untuk calon mahasiswa.</p>
+            </div>
+            <Button
+              onClick={handleSavePayment}
+              disabled={isSavingPayment}
+              className="bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 rounded-xl px-6 h-11 gap-2"
+            >
+              {isSavingPayment ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              {isSavingPayment ? "Menyimpan..." : "Simpan Pengaturan Bayar"}
+            </Button>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-emerald-500" />
+                Biaya Pendaftaran
+              </CardTitle>
+              <CardDescription>Nominal biaya pendaftaran yang dikenakan kepada calon mahasiswa.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div>
+                <label className="block text-xs font-semibold mb-1 text-slate-500">Jumlah (Rupiah)</label>
+                <div className="flex gap-2 items-center">
+                  <span className="text-sm font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-l-md shrink-0">Rp</span>
+                  <Input
+                    type="number"
+                    value={paymentSettings.registrationFee}
+                    onChange={(e) => setPaymentSettings(p => ({ ...p, registrationFee: Number(e.target.value) || 0 }))}
+                    placeholder="300000"
+                    className="rounded-l-none font-mono"
+                    min={0}
+                  />
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1">Contoh: 300000 = Rp 300.000</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-emerald-500" />
+                Transfer Bank
+              </CardTitle>
+              <CardDescription>Informasi rekening bank untuk pembayaran manual via transfer. Selalu aktif dan tidak dapat dinonaktifkan.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold mb-1 text-slate-500">Nama Bank</label>
+                <Input
+                  value={paymentSettings.bankName}
+                  onChange={(e) => setPaymentSettings(p => ({ ...p, bankName: e.target.value }))}
+                  placeholder="BJB Syariah"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold mb-1 text-slate-500">Nomor Rekening</label>
+                <Input
+                  value={paymentSettings.bankAccountNumber}
+                  onChange={(e) => setPaymentSettings(p => ({ ...p, bankAccountNumber: e.target.value }))}
+                  placeholder="0040102001205"
+                  className="font-mono"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold mb-1 text-slate-500">Atas Nama</label>
+                <Input
+                  value={paymentSettings.bankAccountName}
+                  onChange={(e) => setPaymentSettings(p => ({ ...p, bankAccountName: e.target.value }))}
+                  placeholder="Universitas Nusa Bangsa"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-emerald-500" />
+                Midtrans Payment Gateway
+              </CardTitle>
+              <CardDescription>Aktifkan Midtrans untuk menerima pembayaran online (QRIS, e-wallet, kartu kredit, dll). Memerlukan akun Midtrans yang sudah diverifikasi.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
+                <div>
+                  <p className="text-sm font-semibold">Aktifkan Midtrans</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Tampilkan opsi Midtrans di modal pembayaran</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPaymentSettings(p => ({ ...p, midtransEnabled: !p.midtransEnabled }))}
+                  className={`transition-colors ${paymentSettings.midtransEnabled ? "text-emerald-500" : "text-slate-300"}`}
+                >
+                  {paymentSettings.midtransEnabled ? <ToggleRight className="w-10 h-10" /> : <ToggleLeft className="w-10 h-10" />}
+                </button>
+              </div>
+
+              <div className={paymentSettings.midtransEnabled ? "" : "opacity-50 pointer-events-none"}>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold mb-1 text-slate-500">Client Key</label>
+                    <Input
+                      value={paymentSettings.midtransClientKey}
+                      onChange={(e) => setPaymentSettings(p => ({ ...p, midtransClientKey: e.target.value }))}
+                      placeholder="SB-Mid-client-xxxxxxxx (Sandbox) atau Mid-client-xxxxxxxx (Production)"
+                      className="font-mono text-xs"
+                    />
+                    <p className="text-[10px] text-slate-400 mt-1">Client Key tersedia di dashboard Midtrans → Settings → Access Keys</p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-semibold mb-2 text-slate-500">Server Key</p>
+                    <div className="flex items-start gap-2 p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/30 rounded-xl">
+                      <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                      <p className="text-[11px] text-blue-700 dark:text-blue-300 leading-relaxed">
+                        Server Key diatur melalui environment variable <code className="font-mono bg-blue-100 dark:bg-blue-900/50 px-1 rounded">MIDTRANS_SERVER_KEY</code> di server, bukan di sini, demi keamanan.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
+                    <div>
+                      <p className="text-sm font-semibold">Mode Produksi</p>
+                      <p className="text-xs text-slate-400 mt-0.5">Nonaktifkan untuk mode sandbox/testing</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentSettings(p => ({ ...p, midtransIsProduction: !p.midtransIsProduction }))}
+                      className={`transition-colors ${paymentSettings.midtransIsProduction ? "text-emerald-500" : "text-slate-300"}`}
+                    >
+                      {paymentSettings.midtransIsProduction ? <ToggleRight className="w-10 h-10" /> : <ToggleLeft className="w-10 h-10" />}
+                    </button>
+                  </div>
+                  {!paymentSettings.midtransIsProduction && (
+                    <div className="flex items-start gap-2 p-3 bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800/30 rounded-xl">
+                      <Info className="w-4 h-4 text-yellow-600 shrink-0 mt-0.5" />
+                      <p className="text-[11px] text-yellow-700 dark:text-yellow-300 leading-relaxed">
+                        Mode <strong>Sandbox</strong> aktif — transaksi bersifat simulasi dan tidak memproses uang nyata. Gunakan ini untuk testing.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       )}
     </div>
   );
