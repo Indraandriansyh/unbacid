@@ -61,13 +61,27 @@ MIDTRANS_IS_PRODUCTION=false
 
 ## Langkah 4 — Inisialisasi Skema Database
 
-Jalankan perintah berikut untuk membuat semua tabel secara otomatis:
+**Pilihan A — Menggunakan file SQL (direkomendasikan untuk setup awal):**
+
+File `database.sql` sudah tersedia di root project. Jalankan via terminal:
+
+```bash
+psql -U postgres -d unb_db -f database.sql
+```
+
+Atau buka file `database.sql` di pgAdmin → Query Tool → Run.
+
+File ini akan membuat semua tabel dan mengisi data awal (pengaturan pembayaran, nomor WhatsApp, dll.).
+
+---
+
+**Pilihan B — Menggunakan perintah Drizzle (hanya skema, tanpa seed):**
 
 ```bash
 pnpm --filter @workspace/db run db:push
 ```
 
-Jika ada peringatan, jalankan dengan flag force:
+Jika ada peringatan, tambahkan flag force:
 
 ```bash
 pnpm --filter @workspace/db run db:push --force
