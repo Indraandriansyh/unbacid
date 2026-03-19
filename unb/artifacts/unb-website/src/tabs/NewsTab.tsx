@@ -21,6 +21,7 @@ export type NewsPost = {
   author: string;
   publishedAt: string;
   blocks: NewsBlock[];
+  prodiId?: string;
 };
 
 export type NewsContent = {

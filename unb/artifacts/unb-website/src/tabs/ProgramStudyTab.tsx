@@ -9,8 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ArrowLeft, Calendar, User, Images } from "lucide-react";
+import type { NewsPost } from "./NewsTab";
 
 type MediaItem = { type: "image" | "video"; url: string };
+type GalleryItem = { url: string; caption?: string; title?: string };
 
 type ProgramId =
   | "agroteknologi-s1"
@@ -362,6 +365,8 @@ interface ProgramStudyTabProps {
 
 export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProps) {
   const [openAccred, setOpenAccred] = useState(false);
+  const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null);
+  const [openGalleryIndex, setOpenGalleryIndex] = useState<number | null>(null);
   const { settings } = useSettings();
 
   const page = useMemo(() => {
@@ -380,6 +385,32 @@ export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProp
       bannerItems: (saved.bannerItems && saved.bannerItems.length > 0) ? saved.bannerItems : base.bannerItems,
     };
   }, [programId, settings]);
+
+  const gallery = useMemo<GalleryItem[]>(() => {
+    const saved = (settings as any).prodiContent?.[programId];
+    return Array.isArray(saved?.gallery) ? saved.gallery : [];
+  }, [programId, settings]);
+
+  const prodiNews = useMemo<NewsPost[]>(() => {
+    const raw = (settings as any).newsContent;
+    const allPosts: NewsPost[] = Array.isArray(raw?.posts) ? raw.posts : [];
+    return allPosts
+      .filter((p) => p.prodiId === programId)
+      .sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)));
+  }, [programId, settings]);
+
+  const selectedNews = useMemo(() => {
+    if (!selectedNewsId) return null;
+    return prodiNews.find((p) => p.id === selectedNewsId) ?? null;
+  }, [prodiNews, selectedNewsId]);
+
+  const formatDate = (iso: string) => {
+    try {
+      return new Intl.DateTimeFormat("id-ID", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(iso));
+    } catch {
+      return iso;
+    }
+  };
 
   const dosen = useMemo(() => {
     const fakultasKey = page.dosenFilter.fakultasIncludes.toLowerCase();
@@ -536,6 +567,170 @@ export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProp
             ))}
           </div>
         </div>
+
+        {gallery.length > 0 && (
+          <div className="mt-16">
+            <div className="flex items-end justify-between gap-6 mb-8">
+              <div>
+                <p className="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em]">Dokumentasi</p>
+                <h3 className="text-3xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500 mt-1">
+                  Galeri Kegiatan
+                </h3>
+              </div>
+              <Images className="w-7 h-7 text-emerald-500 shrink-0" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {gallery.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="relative group cursor-pointer rounded-[22px] overflow-hidden aspect-square bg-white/5 border border-white/10 shadow-xl"
+                  onClick={() => setOpenGalleryIndex(idx)}
+                >
+                  <img
+                    src={item.url}
+                    alt={item.caption ?? item.title ?? "Foto kegiatan"}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  {(item.title || item.caption) && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                      <div>
+                        {item.title && (
+                          <p className="text-white text-[11px] font-black uppercase tracking-widest line-clamp-1">{item.title}</p>
+                        )}
+                        {item.caption && (
+                          <p className="text-gray-300 text-[10px] font-bold line-clamp-2 mt-1">{item.caption}</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {prodiNews.length > 0 && !selectedNews && (
+          <div className="mt-16">
+            <div className="flex items-end justify-between gap-6 mb-8">
+              <div>
+                <p className="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em]">Publikasi</p>
+                <h3 className="text-3xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500 mt-1">
+                  Berita & Jurnal
+                </h3>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {prodiNews.map((post) => (
+                <div
+                  key={post.id}
+                  className="blog-card group cursor-pointer shadow-xl"
+                  onClick={() => setSelectedNewsId(post.id)}
+                >
+                  <div className="relative aspect-video overflow-hidden">
+                    {post.bannerUrl ? (
+                      <img
+                        src={post.bannerUrl}
+                        alt={post.title}
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-emerald-900/30 flex items-center justify-center">
+                        <span className="text-emerald-500 text-4xl font-black italic">UNB</span>
+                      </div>
+                    )}
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
+                        {post.category}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-[9px] text-emerald-500/60 font-bold uppercase tracking-widest mb-3">{formatDate(post.publishedAt)}</p>
+                    <h3 className="font-black italic uppercase text-base mb-3 leading-snug text-white group-hover:text-emerald-400 transition-colors duration-500">
+                      {post.title}
+                    </h3>
+                    <p className="text-[10px] text-gray-300 font-bold leading-relaxed line-clamp-3">{post.excerpt}</p>
+                    <button
+                      type="button"
+                      className="mt-5 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-emerald-400 hover:text-emerald-300 transition-colors"
+                      onClick={(e) => { e.stopPropagation(); setSelectedNewsId(post.id); }}
+                    >
+                      Baca Selengkapnya
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {selectedNews && (
+          <div className="mt-16 animate-fade-in">
+            <button
+              onClick={() => setSelectedNewsId(null)}
+              className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-400 hover:text-emerald-300 transition-colors mb-8"
+            >
+              <ArrowLeft size={14} strokeWidth={3} />
+              Kembali ke Daftar Berita
+            </button>
+            {selectedNews.bannerUrl && (
+              <div className="relative mb-10">
+                <MediaBanner items={[{ type: "image", url: selectedNews.bannerUrl }]} />
+              </div>
+            )}
+            <div className="max-w-4xl mx-auto">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <span className="bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
+                  {selectedNews.category}
+                </span>
+                <div className="flex items-center gap-2 text-[10px] text-gray-400 font-bold">
+                  <Calendar size={14} strokeWidth={2.5} />
+                  {formatDate(selectedNews.publishedAt)}
+                </div>
+                {selectedNews.author && (
+                  <div className="flex items-center gap-2 text-[10px] text-gray-400 font-bold">
+                    <User size={14} strokeWidth={2.5} />
+                    {selectedNews.author}
+                  </div>
+                )}
+              </div>
+              <h1 className="text-3xl md:text-5xl font-black italic uppercase tracking-tight text-black dark:text-white transition-colors duration-500 mb-6">
+                {selectedNews.title}
+              </h1>
+              <div className="space-y-6">
+                {selectedNews.blocks.map((block) => {
+                  if (block.type === "heading") {
+                    return <h2 key={block.id} className="text-xl md:text-2xl font-black italic uppercase text-black dark:text-white transition-colors duration-500">{block.text}</h2>;
+                  }
+                  if (block.type === "subheading") {
+                    return <h3 key={block.id} className="text-lg md:text-xl font-black italic uppercase text-emerald-500 transition-colors duration-500">{block.text}</h3>;
+                  }
+                  if (block.type === "paragraph") {
+                    return <p key={block.id} className="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500 whitespace-pre-line">{block.text}</p>;
+                  }
+                  if (block.type === "image") {
+                    return (
+                      <div key={block.id} className="rounded-[30px] overflow-hidden border border-black/5 dark:border-white/10">
+                        <img src={block.url} alt={block.caption ?? ""} className="w-full h-auto object-cover" />
+                        {block.caption && <div className="p-4 text-[11px] text-gray-500 dark:text-gray-400 font-bold">{block.caption}</div>}
+                      </div>
+                    );
+                  }
+                  if (block.type === "link") {
+                    return (
+                      <a key={block.id} href={block.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-400 hover:text-emerald-300 transition-colors">
+                        {block.label}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                      </a>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       <Dialog open={openAccred} onOpenChange={setOpenAccred}>
@@ -558,6 +753,52 @@ export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProp
               </p>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={openGalleryIndex !== null} onOpenChange={(open) => { if (!open) setOpenGalleryIndex(null); }}>
+        <DialogContent className="max-w-3xl bg-black border-white/10 rounded-[30px] p-0 overflow-hidden">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Foto Galeri</DialogTitle>
+          </DialogHeader>
+          {openGalleryIndex !== null && gallery[openGalleryIndex] && (
+            <div>
+              <img
+                src={gallery[openGalleryIndex].url}
+                alt={gallery[openGalleryIndex].caption ?? gallery[openGalleryIndex].title ?? "Foto kegiatan"}
+                className="w-full max-h-[70vh] object-contain"
+              />
+              {(gallery[openGalleryIndex].title || gallery[openGalleryIndex].caption) && (
+                <div className="p-6">
+                  {gallery[openGalleryIndex].title && (
+                    <p className="text-white text-sm font-black uppercase tracking-widest">{gallery[openGalleryIndex].title}</p>
+                  )}
+                  {gallery[openGalleryIndex].caption && (
+                    <p className="text-gray-400 text-[11px] font-bold mt-2">{gallery[openGalleryIndex].caption}</p>
+                  )}
+                </div>
+              )}
+              <div className="flex justify-center gap-3 pb-6">
+                <button
+                  type="button"
+                  onClick={() => setOpenGalleryIndex(Math.max(0, openGalleryIndex - 1))}
+                  disabled={openGalleryIndex === 0}
+                  className="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-[10px] font-black uppercase tracking-widest disabled:opacity-30 transition-colors"
+                >
+                  ← Sebelumnya
+                </button>
+                <span className="px-4 py-2 text-gray-400 text-[10px] font-bold">{openGalleryIndex + 1} / {gallery.length}</span>
+                <button
+                  type="button"
+                  onClick={() => setOpenGalleryIndex(Math.min(gallery.length - 1, openGalleryIndex + 1))}
+                  disabled={openGalleryIndex === gallery.length - 1}
+                  className="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-[10px] font-black uppercase tracking-widest disabled:opacity-30 transition-colors"
+                >
+                  Berikutnya →
+                </button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
