@@ -85,12 +85,12 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
         id: 'layanan', 
         label: t.nav.services,
         children: [
-          { label: t.services.simak, id: 'simak' },
-          { label: t.services.arteri, id: 'arteri' },
+          { label: t.services.simak, id: 'simak', url: 'https://unb.eakademik.id/' },
+          { label: t.services.arteri, id: 'arteri', url: 'https://ypkmk-nusantara.or.id/' },
           { label: t.services.scholarship, id: 'scholarship' },
           { label: t.services.career, id: 'career' },
-          { label: t.services.hr, id: 'hr' },
-          { label: t.services.repository, id: 'repository' },
+          { label: t.services.hr, id: 'hr', url: 'https://diktendik.unb.ac.id/' },
+          { label: t.services.repository, id: 'repository', url: 'https://repository.unb.ac.id/' },
         ]
       },
       { id: 'blog', label: t.nav.news },
@@ -128,17 +128,17 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                   child.children ? (
                     <DropdownMenuSub key={idx}>
                       <DropdownMenuSubTrigger 
-                        onClick={() => setActiveTab(child.id)}
+                        onClick={() => setActiveTab(child.id as TabType)}
                         className="text-[9px] font-bold tracking-wider uppercase text-gray-500 dark:text-gray-400 hover:text-emerald-500 dark:hover:text-emerald-400 focus:text-emerald-500 dark:focus:text-emerald-400 focus:bg-emerald-500/5 cursor-pointer rounded-lg transition-colors py-2.5 px-3 flex items-center justify-between"
                       >
                         {child.label}
                       </DropdownMenuSubTrigger>
                       <DropdownMenuPortal>
                         <DropdownMenuSubContent className="bg-white dark:bg-[#111] border-black/10 dark:border-white/10 rounded-xl min-w-[180px] p-2 ml-1">
-                          {child.children.map((subChild, subIdx) => (
+                          {child.children.map((subChild: any, subIdx: number) => (
                             <DropdownMenuItem
                               key={subIdx}
-                              onClick={() => setActiveTab(subChild.id)}
+                              onClick={() => subChild.url ? window.open(subChild.url, '_blank', 'noopener,noreferrer') : setActiveTab(subChild.id as TabType)}
                               className="text-[9px] font-bold tracking-wider uppercase text-gray-500 dark:text-gray-400 hover:text-emerald-500 dark:hover:text-emerald-400 focus:text-emerald-500 dark:focus:text-emerald-400 focus:bg-emerald-500/5 cursor-pointer rounded-lg transition-colors py-2.5 px-3"
                             >
                               {subChild.label}
@@ -150,7 +150,7 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                   ) : (
                     <DropdownMenuItem
                       key={idx}
-                      onClick={() => setActiveTab(child.id)}
+                      onClick={() => (child as any).url ? window.open((child as any).url, '_blank', 'noopener,noreferrer') : setActiveTab(child.id as TabType)}
                       className="text-[9px] font-bold tracking-wider uppercase text-gray-500 dark:text-gray-400 hover:text-emerald-500 dark:hover:text-emerald-400 focus:text-emerald-500 dark:focus:text-emerald-400 focus:bg-emerald-500/5 cursor-pointer rounded-lg transition-colors py-2.5 px-3"
                     >
                       {child.label}
@@ -284,10 +284,10 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                                     openMobileSubSubmenu === child.label ? 'max-h-[400px] py-1' : 'max-h-0'
                                   }`}
                                 >
-                                  {child.children.map((subChild, subIdx) => (
+                                  {child.children.map((subChild: any, subIdx: number) => (
                                     <button
                                       key={subIdx}
-                                      onClick={() => handleTabClick(subChild.id)}
+                                      onClick={() => subChild.url ? window.open(subChild.url, '_blank', 'noopener,noreferrer') : handleTabClick(subChild.id)}
                                       className="w-full text-left px-11 py-2 text-[7.5px] font-bold tracking-wider uppercase text-gray-400 dark:text-gray-500 hover:text-emerald-500 transition-colors"
                                     >
                                       {subChild.label}
@@ -297,7 +297,7 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                               </>
                             ) : (
                               <button
-                                onClick={() => handleTabClick(child.id)}
+                                onClick={() => (child as any).url ? window.open((child as any).url, '_blank', 'noopener,noreferrer') : handleTabClick(child.id as TabType)}
                                 className="w-full text-left px-8 py-2.5 text-[8px] font-bold tracking-wider uppercase text-gray-500 dark:text-gray-400 hover:text-emerald-500 transition-colors"
                               >
                                 {child.label}
