@@ -5,6 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Lock, User, ShieldCheck } from "lucide-react";
+import { saveSession } from "@/lib/auth";
+
+const API = "/api";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -13,27 +16,28 @@ export default function AdminLogin() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
-    // Mock login for now
-    setTimeout(() => {
-      if (username === "admin" && password === "admin123") {
-        toast({
-          title: "Login Berhasil",
-          description: "Selamat datang di Dashboard Admin Master UNB.",
-        });
-        setLocation("/admin/dashboard");
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Login Gagal",
-          description: "Username atau password salah.",
-        });
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast({ variant: "destructive", title: "Login Gagal", description: data.error || "Username atau password salah." });
+        return;
       }
+      saveSession(data);
+      toast({ title: "Login Berhasil", description: `Selamat datang, ${data.user.displayName}` });
+      setLocation("/admin/dashboard");
+    } catch {
+      toast({ variant: "destructive", title: "Kesalahan", description: "Tidak dapat terhubung ke server." });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -48,7 +52,7 @@ export default function AdminLogin() {
         <Card className="border-none shadow-2xl bg-white dark:bg-[#1a1a1a] rounded-3xl overflow-hidden">
           <CardHeader className="space-y-1 pb-8 text-center">
             <CardTitle className="text-3xl font-extrabold tracking-tight text-emerald-600 dark:text-emerald-500">
-              Admin Master
+              Admin UNB
             </CardTitle>
             <CardDescription className="text-muted-foreground">
               Silakan login untuk mengelola website UNB
@@ -82,8 +86,8 @@ export default function AdminLogin() {
                   />
                 </div>
               </div>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full h-12 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                 disabled={isLoading}
               >
@@ -92,7 +96,7 @@ export default function AdminLogin() {
             </form>
           </CardContent>
         </Card>
-        
+
         <div className="mt-8 text-center text-sm text-muted-foreground">
           &copy; {new Date().getFullYear()} Universitas Nusa Bangsa. All rights reserved.
         </div>

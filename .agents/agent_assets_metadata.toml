@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "ec3Vsz2R7VES8Op7TSv9j"
+uri = "file://DAFTAR_AKUN_ADMIN.md"
+type = "text"
+title = "Daftar Username & Password Admin"

@@ -24,7 +24,18 @@ import { ImageModal } from './components/ImageModal';
 import { useLanguage } from '@/contexts/LanguageContext';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import FakultasAdminDashboard from './pages/FakultasAdminDashboard';
+import ProdiAdminDashboard from './pages/ProdiAdminDashboard';
+import { getSession } from './lib/auth';
 import type { TabType } from './types';
+
+function DashboardRouter() {
+  const session = getSession();
+  const role = session?.user?.role;
+  if (role === "fakultas") return <FakultasAdminDashboard />;
+  if (role === "prodi") return <ProdiAdminDashboard />;
+  return <AdminDashboard />;
+}
 
 const queryClient = new QueryClient();
 
@@ -117,7 +128,7 @@ function App() {
           <SettingsProvider>
             <Switch>
               <Route path="/admin" component={AdminLogin} />
-              <Route path="/admin/dashboard" component={AdminDashboard} />
+              <Route path="/admin/dashboard" component={DashboardRouter} />
               <Route path="/">
                 <MainContent />
               </Route>

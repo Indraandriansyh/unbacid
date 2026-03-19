@@ -102,6 +102,35 @@ INSERT INTO site_settings (key, value, updated_at) VALUES (
 );
 
 -- ============================================================
+--  TABEL: admin_users
+--  Akun admin untuk dashboard (master, fakultas, prodi)
+-- ============================================================
+CREATE TABLE admin_users (
+    id           SERIAL PRIMARY KEY,
+    username     TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    role         TEXT NOT NULL,
+    scope_id     TEXT,
+    display_name TEXT NOT NULL,
+    created_by   TEXT,
+    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()
+);
+
+-- ============================================================
+--  SEED DATA: admin_users
+--  Untuk generate hash baru setelah restore:
+--    cd unb/artifacts/api-server
+--    pnpm exec tsx seed-admins.ts
+--  (jalankan dari folder api-server setelah install deps)
+-- ============================================================
+
+-- CATATAN: Jalankan perintah ini dari folder api-server setelah
+-- menjalankan database.sql untuk mengisi admin users dengan hash bcrypt:
+--
+--   cd unb/artifacts/api-server
+--   DATABASE_URL="postgresql://..." pnpm exec tsx seed-admins.ts
+
+-- ============================================================
 --  SELESAI
 --  Setelah menjalankan file ini, buka Admin Panel di /admin
 --  untuk melengkapi konten website (beranda, profil, berita, dll.)
