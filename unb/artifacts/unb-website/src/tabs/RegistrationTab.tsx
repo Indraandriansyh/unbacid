@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCreateRegistration } from '../hooks/use-registrations';
 import { useToast } from '@/hooks/use-toast';
+import { useSettings } from '@/contexts/SettingsContext';
 import { MediaBanner } from '../components/MediaBanner';
 import { 
   UserCheck, 
@@ -18,10 +19,15 @@ import {
   GraduationCap,
   Trophy,
   Gift,
+  Star,
+  BookOpen,
+  Wallet,
+  Award,
   Info,
   MapPin,
   Download,
-  MessageCircle
+  MessageCircle,
+  type LucideIcon
 } from 'lucide-react';
 import {
   Dialog,
@@ -30,6 +36,81 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+
+// ─── Types ───────────────────────────────────────────────────────
+export type FlowStep = {
+  id: number;
+  title: string;
+  sub: string;
+  iconName: string;
+  desc: string;
+};
+
+export type TrackItem = {
+  id: number;
+  title: string;
+  sub: string;
+  iconName: string;
+  desc: string;
+};
+
+export type WaveItem = {
+  title: string;
+  date: string;
+  status: string;
+  active: boolean;
+};
+
+export type TuitionProgram = {
+  name: string;
+  reguler: string;
+  ekstensi: string;
+};
+
+export type TuitionGroup = {
+  no: string;
+  faculty: string;
+  programs: TuitionProgram[];
+};
+
+export type RegistrationContent = {
+  bannerItems: { type: "image" | "video"; url: string }[];
+  admissionFlow: FlowStep[];
+  admissionTracks: TrackItem[];
+  admissionWaves: WaveItem[];
+  tuitionData: TuitionGroup[];
+  brochureUrl: string;
+  formUrl: string;
+  whatsappNumber: string;
+};
+
+// ─── Icon Map ────────────────────────────────────────────────────
+const ICON_MAP: Record<string, LucideIcon> = {
+  UserCheck,
+  FileEdit,
+  CreditCard,
+  UploadCloud,
+  ClipboardCheck,
+  CheckCircle,
+  GraduationCap,
+  Trophy,
+  Gift,
+  Star,
+  BookOpen,
+  Wallet,
+  Award,
+  MessageCircle,
+};
+
+export const FLOW_ICON_OPTIONS = [
+  "UserCheck", "FileEdit", "CreditCard", "UploadCloud", "ClipboardCheck",
+  "CheckCircle", "Star", "BookOpen", "Award",
+];
+
+export const TRACK_ICON_OPTIONS = [
+  "GraduationCap", "Trophy", "Gift", "Star", "Award",
+  "BookOpen", "Wallet", "MessageCircle",
+];
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Required"),
@@ -52,122 +133,75 @@ const FACULTY_PROGRAMS: Record<string, string[]> = {
   "Fakultas Kehutanan & Lingkungan": ["Kehutanan & Lingkungan"]
 };
 
-const ADMISSION_FLOW = [
-  { 
-    id: 1, 
-    title: 'Pra-Pendaftaran', 
-    sub: 'Pre-Registration', 
-    icon: UserCheck,
-    desc: 'Calon mahasiswa melakukan registrasi akun di portal pendaftaran dengan email aktif untuk mendapatkan akses ke formulir pendaftaran online.'
-  },
-  { 
-    id: 2, 
-    title: 'Isi Formulir', 
-    sub: 'Fill Registration Form', 
-    icon: FileEdit,
-    desc: 'Melengkapi data diri secara detail, data orang tua/wali, serta riwayat pendidikan pada formulir pendaftaran yang telah disediakan.'
-  },
-  { 
-    id: 3, 
-    title: 'Pembayaran', 
-    sub: 'Pay Registration Fees', 
-    icon: CreditCard,
-    desc: 'Melakukan pembayaran biaya pendaftaran melalui bank atau kanal pembayaran resmi yang tersedia untuk memvalidasi pendaftaran Anda.'
-  },
-  { 
-    id: 4, 
-    title: 'Lengkapi Berkas', 
-    sub: 'Complete Form', 
-    icon: UploadCloud,
-    desc: 'Mengunggah dokumen pendukung seperti scan ijazah/SKL, Kartu Keluarga, KTP, dan foto terbaru untuk keperluan verifikasi administrasi.'
-  },
-  { 
-    id: 5, 
-    title: 'Seleksi', 
-    sub: 'Selection Process', 
-    icon: ClipboardCheck,
-    desc: 'Mengikuti ujian saringan masuk (Computer Based Test) atau seleksi berkas/prestasi sesuai dengan jalur pendaftaran yang Anda pilih.'
-  },
-  { 
-    id: 6, 
-    title: 'Daftar Ulang', 
-    sub: 'Re-Registration', 
-    icon: CheckCircle,
-    desc: 'Setelah dinyatakan lulus, calon mahasiswa melakukan konfirmasi kedatangan dan melunasi biaya administrasi semester pertama.'
-  },
-];
-
-const ADMISSION_TRACKS = [
-  { 
-    id: 1, 
-    title: 'Jalur Reguler', 
-    sub: 'Regular Admission', 
-    icon: GraduationCap, 
-    desc: 'Jalur seleksi umum bagi lulusan SMA/SMK/MA sederajat melalui tes saringan masuk universitas untuk mengukur kemampuan akademik dasar calon mahasiswa.' 
-  },
-  { 
-    id: 2, 
-    title: 'Jalur Prestasi', 
-    sub: 'Achievement Track', 
-    icon: Trophy, 
-    desc: 'Jalur khusus tanpa tes tertulis bagi siswa yang memiliki prestasi akademik (seperti peringkat kelas) atau non-akademik (olahraga, seni, atau organisasi) minimal tingkat kabupaten/kota.' 
-  },
-  { 
-    id: 3, 
-    title: 'Jalur Beasiswa', 
-    sub: 'Scholarship Track', 
-    icon: Gift, 
-    desc: 'Program bantuan biaya pendidikan yang meliputi Beasiswa Hafiz Quran (minimal 10 juz), Beasiswa Prestasi Unggulan, dan KIP Kuliah bagi mahasiswa yang memenuhi kriteria ekonomi dan akademik.' 
-  },
-];
-
-const ADMISSION_WAVES = [
-  { title: 'Gelombang 1', date: 'Januari - Maret 2026', status: 'Buka', active: true },
-  { title: 'Gelombang 2', date: 'April - Juni 2026', status: 'Segera', active: false },
-  { title: 'Gelombang 3', date: 'Juli - Agustus 2026', status: 'Segera', active: false },
-];
-
-const TUITION_DATA = [
-  {
-    no: "I",
-    faculty: "Fakultas Ekonomi & Bisnis",
-    programs: [
+// ─── Default Data ────────────────────────────────────────────────
+export const DEFAULT_REGISTRATION_CONTENT: RegistrationContent = {
+  bannerItems: [
+    { type: "image", url: "https://images.unsplash.com/photo-1523050853064-8521a3998af7?q=80&w=1200" },
+    { type: "image", url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200" },
+  ],
+  admissionFlow: [
+    { id: 1, title: 'Pra-Pendaftaran', sub: 'Pre-Registration', iconName: 'UserCheck', desc: 'Calon mahasiswa melakukan registrasi akun di portal pendaftaran dengan email aktif untuk mendapatkan akses ke formulir pendaftaran online.' },
+    { id: 2, title: 'Isi Formulir', sub: 'Fill Registration Form', iconName: 'FileEdit', desc: 'Melengkapi data diri secara detail, data orang tua/wali, serta riwayat pendidikan pada formulir pendaftaran yang telah disediakan.' },
+    { id: 3, title: 'Pembayaran', sub: 'Pay Registration Fees', iconName: 'CreditCard', desc: 'Melakukan pembayaran biaya pendaftaran melalui bank atau kanal pembayaran resmi yang tersedia untuk memvalidasi pendaftaran Anda.' },
+    { id: 4, title: 'Lengkapi Berkas', sub: 'Complete Form', iconName: 'UploadCloud', desc: 'Mengunggah dokumen pendukung seperti scan ijazah/SKL, Kartu Keluarga, KTP, dan foto terbaru untuk keperluan verifikasi administrasi.' },
+    { id: 5, title: 'Seleksi', sub: 'Selection Process', iconName: 'ClipboardCheck', desc: 'Mengikuti ujian saringan masuk (Computer Based Test) atau seleksi berkas/prestasi sesuai dengan jalur pendaftaran yang Anda pilih.' },
+    { id: 6, title: 'Daftar Ulang', sub: 'Re-Registration', iconName: 'CheckCircle', desc: 'Setelah dinyatakan lulus, calon mahasiswa melakukan konfirmasi kedatangan dan melunasi biaya administrasi semester pertama.' },
+  ],
+  admissionTracks: [
+    { id: 1, title: 'Jalur Reguler', sub: 'Regular Admission', iconName: 'GraduationCap', desc: 'Jalur seleksi umum bagi lulusan SMA/SMK/MA sederajat melalui tes saringan masuk universitas untuk mengukur kemampuan akademik dasar calon mahasiswa.' },
+    { id: 2, title: 'Jalur Prestasi', sub: 'Achievement Track', iconName: 'Trophy', desc: 'Jalur khusus tanpa tes tertulis bagi siswa yang memiliki prestasi akademik (seperti peringkat kelas) atau non-akademik (olahraga, seni, atau organisasi) minimal tingkat kabupaten/kota.' },
+    { id: 3, title: 'Jalur Beasiswa', sub: 'Scholarship Track', iconName: 'Gift', desc: 'Program bantuan biaya pendidikan yang meliputi Beasiswa Hafiz Quran (minimal 10 juz), Beasiswa Prestasi Unggulan, dan KIP Kuliah bagi mahasiswa yang memenuhi kriteria ekonomi dan akademik.' },
+  ],
+  admissionWaves: [
+    { title: 'Gelombang 1', date: 'Januari - Maret 2026', status: 'Buka', active: true },
+    { title: 'Gelombang 2', date: 'April - Juni 2026', status: 'Segera', active: false },
+    { title: 'Gelombang 3', date: 'Juli - Agustus 2026', status: 'Segera', active: false },
+  ],
+  tuitionData: [
+    { no: "I", faculty: "Fakultas Ekonomi & Bisnis", programs: [
       { name: "Manajemen", reguler: "5,005,000", ekstensi: "6,240,000" },
       { name: "Akutansi", reguler: "5,005,000", ekstensi: "6,240,000" },
       { name: "Magister Ekonomi Pembangunan (Pascasarjana)", reguler: "7,500,000", ekstensi: "8,500,000" },
-    ]
-  },
-  {
-    no: "II",
-    faculty: "Fakultas Agroteknopreneur & Agraria",
-    programs: [
+    ]},
+    { no: "II", faculty: "Fakultas Agroteknopreneur & Agraria", programs: [
       { name: "Agroteknologi", reguler: "5,520,000", ekstensi: "6,810,000" },
       { name: "Agribisnis", reguler: "5,520,000", ekstensi: "6,810,000" },
-    ]
-  },
-  {
-    no: "III",
-    faculty: "Fakultas Sains & Teknologi",
-    programs: [
+    ]},
+    { no: "III", faculty: "Fakultas Sains & Teknologi", programs: [
       { name: "Kimia", reguler: "5,150,000", ekstensi: "6,275,000" },
       { name: "Biologi", reguler: "5,245,000", ekstensi: "6,370,000" },
       { name: "Data Sains", reguler: "5,300,000", ekstensi: "6,500,000" },
-    ]
-  },
-  {
-    no: "IV",
-    faculty: "Fakultas Kehutanan & Lingkungan",
-    programs: [
+    ]},
+    { no: "IV", faculty: "Fakultas Kehutanan & Lingkungan", programs: [
       { name: "Kehutanan & Lingkungan", reguler: "5,520,000", ekstensi: "6,810,000" },
-    ]
-  }
-];
+    ]},
+  ],
+  brochureUrl: "",
+  formUrl: "",
+  whatsappNumber: "6281234567890",
+};
 
 export function RegistrationTab() {
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { settings } = useSettings();
   const createRegistration = useCreateRegistration();
   const [selectedDetail, setSelectedDetail] = useState<{title: string, desc: string, sub?: string} | null>(null);
+
+  const regContent = useMemo<RegistrationContent>(() => {
+    const saved = (settings as any).registrationContent;
+    if (!saved) return DEFAULT_REGISTRATION_CONTENT;
+    return {
+      bannerItems: Array.isArray(saved.bannerItems) ? saved.bannerItems : DEFAULT_REGISTRATION_CONTENT.bannerItems,
+      admissionFlow: Array.isArray(saved.admissionFlow) ? saved.admissionFlow : DEFAULT_REGISTRATION_CONTENT.admissionFlow,
+      admissionTracks: Array.isArray(saved.admissionTracks) ? saved.admissionTracks : DEFAULT_REGISTRATION_CONTENT.admissionTracks,
+      admissionWaves: Array.isArray(saved.admissionWaves) ? saved.admissionWaves : DEFAULT_REGISTRATION_CONTENT.admissionWaves,
+      tuitionData: Array.isArray(saved.tuitionData) ? saved.tuitionData : DEFAULT_REGISTRATION_CONTENT.tuitionData,
+      brochureUrl: saved.brochureUrl ?? "",
+      formUrl: saved.formUrl ?? "",
+      whatsappNumber: saved.whatsappNumber ?? DEFAULT_REGISTRATION_CONTENT.whatsappNumber,
+    };
+  }, [settings]);
 
   const { register, handleSubmit, watch, formState: { errors, isSubmitting }, reset } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -204,10 +238,7 @@ export function RegistrationTab() {
       <section className="px-6 md:px-12 pt-6 pb-16">
         {/* Banner Landscape */}
         <div className="mb-12">
-          <MediaBanner items={[
-            { type: 'image', url: 'https://images.unsplash.com/photo-1523050853064-8521a3998af7?q=80&w=1200' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200' }
-          ]} />
+          <MediaBanner items={regContent.bannerItems.length > 0 ? regContent.bannerItems : DEFAULT_REGISTRATION_CONTENT.bannerItems} />
         </div>
 
         {/* Alur Pendaftaran */}
@@ -221,14 +252,16 @@ export function RegistrationTab() {
             {/* Horizontal line for desktop */}
             <div className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-[1px] bg-white/10 -z-0 transition-colors duration-500"></div>
             
-            {ADMISSION_FLOW.map((step) => (
+            {regContent.admissionFlow.map((step) => {
+              const StepIcon = ICON_MAP[step.iconName] ?? UserCheck;
+              return (
               <div 
                 key={step.id} 
                 className="relative z-10 flex flex-col items-center group cursor-pointer"
                 onClick={() => setSelectedDetail({ title: step.title, desc: step.desc, sub: step.sub })}
               >
                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-card border border-white/10 flex items-center justify-center text-emerald-400 mb-6 group-hover:border-emerald-500/50 group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-500 backdrop-blur-xl relative">
-                  <step.icon size={24} className="md:w-8 md:h-8" strokeWidth={1.5} />
+                  <StepIcon size={24} className="md:w-8 md:h-8" strokeWidth={1.5} />
                   <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-[10px] font-black flex items-center justify-center border-2 border-emerald-900 transition-colors duration-500">
                     {step.id}
                   </div>
@@ -241,7 +274,8 @@ export function RegistrationTab() {
                   <p className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-emerald-600/80 dark:text-emerald-500/60 leading-tight">{step.sub}</p>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -253,7 +287,9 @@ export function RegistrationTab() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {ADMISSION_TRACKS.map((track) => (
+            {regContent.admissionTracks.map((track) => {
+              const TrackIcon = ICON_MAP[track.iconName] ?? GraduationCap;
+              return (
               <div 
                 key={track.id}
                 className="group cursor-pointer bg-card border border-white/10 rounded-[35px] p-8 hover:border-emerald-500/30 hover:shadow-[0_0_50px_rgba(16,185,129,0.2)] transition-all duration-500 relative overflow-hidden shadow-sm"
@@ -262,7 +298,7 @@ export function RegistrationTab() {
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/5 rounded-full blur-[40px] group-hover:bg-emerald-500/10 transition-colors"></div>
                 
                 <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-8 group-hover:scale-110 transition-transform duration-500">
-                  <track.icon size={28} strokeWidth={1.5} />
+                  <TrackIcon size={28} strokeWidth={1.5} />
                 </div>
 
                 <h3 className="text-xl font-black italic uppercase tracking-tighter text-white mb-2 group-hover:text-emerald-400 transition-colors duration-500">{track.title}</h3>
@@ -273,7 +309,8 @@ export function RegistrationTab() {
                   <ArrowRight size={12} />
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -291,7 +328,7 @@ export function RegistrationTab() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {ADMISSION_WAVES.map((wave, idx) => (
+            {regContent.admissionWaves.map((wave, idx) => (
               <div 
                 key={idx} 
                 className={`p-8 rounded-[35px] border transition-all duration-500 relative overflow-hidden group ${
@@ -334,10 +371,22 @@ export function RegistrationTab() {
               <h2 className="text-2xl md:text-4xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">Detail Biaya Pendidikan</h2>
               <p className="text-emerald-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-1">Estimasi Biaya Semester I</p>
             </div>
-            <button className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-emerald-500/20 transition-all group">
-              <Download size={16} className="group-hover:scale-110 transition-transform" />
-              Unduh Brosur
-            </button>
+            {regContent.brochureUrl ? (
+              <a
+                href={regContent.brochureUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-emerald-500/20 transition-all group"
+              >
+                <Download size={16} className="group-hover:scale-110 transition-transform" />
+                Unduh Brosur
+              </a>
+            ) : (
+              <button disabled className="flex items-center gap-2 bg-white/5 text-emerald-500/40 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/10 cursor-not-allowed">
+                <Download size={16} />
+                Brosur Belum Tersedia
+              </button>
+            )}
           </div>
 
           <div className="bg-card border border-white/10 rounded-[30px] overflow-hidden shadow-2xl transition-colors duration-500">
@@ -352,7 +401,7 @@ export function RegistrationTab() {
                   </tr>
                 </thead>
                 <tbody className="text-gray-300 transition-colors duration-500">
-                  {TUITION_DATA.map((item, idx) => (
+                  {regContent.tuitionData.map((item, idx) => (
                     <React.Fragment key={idx}>
                       <tr className="bg-emerald-500/10">
                         <td className="px-6 py-3 font-bold text-white text-xs">{item.no}</td>
@@ -506,10 +555,22 @@ export function RegistrationTab() {
               Anda juga dapat mendaftar secara langsung dengan mengunduh dan mengisi formulir pendaftaran fisik, kemudian membawanya ke bagian pendaftaran di kampus kami.
             </p>
 
-            <button className="flex items-center gap-3 bg-white/5 hover:bg-white/10 text-white px-7 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 group/btn relative z-10">
-              <Download size={18} className="text-emerald-400 group-hover/btn:scale-110 transition-transform" />
-              Unduh Formulir Pendaftaran (PDF)
-            </button>
+            {regContent.formUrl ? (
+              <a
+                href={regContent.formUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 bg-white/5 hover:bg-white/10 text-white px-7 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 group/btn relative z-10"
+              >
+                <Download size={18} className="text-emerald-400 group-hover/btn:scale-110 transition-transform" />
+                Unduh Formulir Pendaftaran (PDF)
+              </a>
+            ) : (
+              <button disabled className="flex items-center gap-3 bg-white/5 text-white/30 px-7 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/10 cursor-not-allowed relative z-10">
+                <Download size={18} className="text-emerald-400/40" />
+                Formulir Belum Tersedia
+              </button>
+            )}
           </div>
 
           <div className="bg-card border border-white/10 rounded-[40px] p-8 md:p-10 shadow-2xl relative overflow-hidden group transition-colors duration-500">
@@ -538,9 +599,9 @@ export function RegistrationTab() {
                 </div>
                 <div>
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400 mb-2">Layanan WhatsApp</h4>
-                  <p className="text-sm text-white font-medium mb-4 transition-colors duration-500">+62 812-3456-7890 (Admin PMB)</p>
+                  <p className="text-sm text-white font-medium mb-4 transition-colors duration-500">+{regContent.whatsappNumber} (Admin PMB)</p>
                   <a 
-                    href="https://wa.me/6281234567890" 
+                    href={`https://wa.me/${regContent.whatsappNumber}`}
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-emerald-400 hover:text-emerald-300 transition-colors"
