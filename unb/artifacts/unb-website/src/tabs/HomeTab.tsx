@@ -1,40 +1,94 @@
+import { useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSettings } from '@/contexts/SettingsContext';
 import type { TabType } from '../types';
 import { MediaBanner } from '../components/MediaBanner';
+import { GallerySection } from '../components/GallerySection';
+import { RecentNewsSection } from '../components/RecentNewsSection';
+import { isVideo } from '../components/GallerySection';
+import type { GalleryItem } from '../components/GallerySection';
 
 interface HomeTabProps {
   setActiveTab: (tab: TabType) => void;
-  openDetail: (src: string) => void;
+  openDetail: (src: string, caption?: string) => void;
+  onOpenNewsPost?: (postId: string) => void;
 }
 
-export function HomeTab({ setActiveTab, openDetail }: HomeTabProps) {
+const FACULTY_CARDS = [
+  {
+    id: 'f_agri' as TabType,
+    icon: '🌾',
+    short: 'Agroteknopreneur',
+    full: 'Fakultas Agroteknopreneur & Agraria',
+    color: 'from-lime-500/20 to-emerald-500/20',
+    border: 'border-lime-500/30',
+    accent: 'text-lime-500',
+  },
+  {
+    id: 'f_econ' as TabType,
+    icon: '📈',
+    short: 'Ekonomi & Bisnis',
+    full: 'Fakultas Ekonomi dan Bisnis',
+    color: 'from-blue-500/20 to-cyan-500/20',
+    border: 'border-blue-500/30',
+    accent: 'text-blue-400',
+  },
+  {
+    id: 'f_forest' as TabType,
+    icon: '🌲',
+    short: 'Kehutanan & Lingkungan',
+    full: 'Fakultas Kehutanan dan Lingkungan',
+    color: 'from-green-600/20 to-teal-500/20',
+    border: 'border-green-500/30',
+    accent: 'text-green-400',
+  },
+  {
+    id: 'f_science' as TabType,
+    icon: '🔬',
+    short: 'Sains & Teknologi',
+    full: 'Fakultas Sains & Teknologi',
+    color: 'from-purple-500/20 to-violet-500/20',
+    border: 'border-purple-500/30',
+    accent: 'text-purple-400',
+  },
+];
+
+const DEFAULT_GRID_ITEMS = [
+  { imageUrl: 'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200', mediaType: 'image' as const },
+  { imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200', mediaType: 'image' as const },
+  { imageUrl: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200', mediaType: 'image' as const },
+];
+
+function shuffleAndPick<T>(arr: T[], n: number): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a.slice(0, n);
+}
+
+export function HomeTab({ setActiveTab, openDetail, onOpenNewsPost }: HomeTabProps) {
   const { t } = useLanguage();
   const { settings } = useSettings();
 
-  // Content priority: Database -> Translations -> Default
   const dbHomeContent = settings.homeContent;
-  
+
   const homeContent = {
     hero: {
       welcome: dbHomeContent?.hero?.welcome || "#WELCOMETO",
       title: dbHomeContent?.hero?.title || "NUSA BANGSA UNIVERSITY",
-      subtitle1: dbHomeContent?.hero?.subtitle1 || t.hero.subtitle1,
-      subtitle2: dbHomeContent?.hero?.subtitle2 || t.hero.subtitle2,
-      accreditation: dbHomeContent?.hero?.accreditation || t.hero.accred,
-      programs: dbHomeContent?.hero?.programs || t.hero.program,
-      buttonText: dbHomeContent?.hero?.buttonText || t.hero.explore
+      subtitle1: t.hero.subtitle1,
+      subtitle2: t.hero.subtitle2,
+      accreditation: t.hero.accred,
+      programs: t.hero.program,
+      buttonText: t.hero.explore
     },
     banners: dbHomeContent?.banners || [
       { type: 'image' as const, url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200' },
       { type: 'image' as const, url: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200' },
       { type: 'video' as const, url: 'https://v.ftcdn.net/06/08/54/12/700_F_608541243_m33xYF6f22UeO1l6C2uI2G7w4X0E1X2T_ST.mp4' },
       { type: 'image' as const, url: 'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200' },
-    ],
-    gridItems: dbHomeContent?.gridItems || [
-      { type: 'image', url: 'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200' },
-      { type: 'image', url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200' },
-      { type: 'image', url: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200' }
     ],
     cta: {
       heading1: dbHomeContent?.cta?.heading1 || t.cta.heading1,
@@ -54,6 +108,42 @@ export function HomeTab({ setActiveTab, openDetail }: HomeTabProps) {
 
   const BANNER_ITEMS = homeContent.banners;
 
+  // Grid items from homeContent.gridItems (admin Media tab)
+  const adminGridStock = useMemo<GalleryItem[]>(() => {
+    const raw = dbHomeContent?.gridItems;
+    if (Array.isArray(raw) && raw.length >= 3) {
+      return raw.map((it: { type?: string; url?: string; imageUrl?: string; mediaType?: string; caption?: string }) => ({
+        imageUrl: it.url ?? it.imageUrl ?? '',
+        mediaType: (it.type ?? it.mediaType ?? 'image') as 'image' | 'video',
+        caption: it.caption ?? '',
+        id: it.url ?? it.imageUrl ?? String(Math.random()),
+      }));
+    }
+    // fallback: gallery stock
+    const gallery = (settings as any).galleryContent;
+    if (gallery?.items && Array.isArray(gallery.items) && gallery.items.length >= 3) {
+      return gallery.items as GalleryItem[];
+    }
+    return [];
+  }, [dbHomeContent, settings]);
+
+  const [gridItems, setGridItems] = useState<GalleryItem[]>(() =>
+    adminGridStock.length >= 3 ? shuffleAndPick(adminGridStock, 3) : DEFAULT_GRID_ITEMS
+  );
+
+  // Rotate grid 3 items from pool every 25 seconds
+  useEffect(() => {
+    if (adminGridStock.length < 3) {
+      setGridItems(DEFAULT_GRID_ITEMS);
+      return;
+    }
+    setGridItems(shuffleAndPick(adminGridStock, 3));
+    const interval = setInterval(() => {
+      setGridItems(shuffleAndPick(adminGridStock, 3));
+    }, 25000);
+    return () => clearInterval(interval);
+  }, [adminGridStock]);
+
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
@@ -70,7 +160,7 @@ export function HomeTab({ setActiveTab, openDetail }: HomeTabProps) {
             <div className="glass-element w-12 h-12 md:w-16 md:h-16 bg-emerald-500/20 flex items-center justify-center text-2xl md:text-4xl shadow-2xl shadow-emerald-500/30">🌱</div>
           </div>
 
-          {/* Main heading — #WELCOMETO / NUSA BANGSA / UNIVERSITY */}
+          {/* Main heading */}
           <h1 className="hero-heading font-black uppercase italic relative z-10 px-2 transition-colors duration-500">
             <span className="text-outline block mb-2 md:mb-4">{homeContent.hero.welcome}</span>
             <span className="text-black dark:text-white transition-colors duration-500">{homeContent.hero.title}</span>
@@ -98,35 +188,94 @@ export function HomeTab({ setActiveTab, openDetail }: HomeTabProps) {
             </button>
           </div>
 
-          {/* New Landscape Media Banner */}
+          {/* Landscape Media Banner */}
           <div className="max-w-5xl mx-auto w-full px-2 md:px-4">
             <MediaBanner items={BANNER_ITEMS} className="mt-16 md:mt-24" />
           </div>
         </div>
 
-        {/* Images Grid — clicking opens popup detail */}
+        {/* Dynamic 3-column Media Grid */}
         <div className="grid grid-cols-3 gap-3 md:gap-6 mt-16 md:mt-24 w-full px-2 md:px-4 max-w-5xl">
-          {homeContent.gridItems.map((item: any, idx: number) => (
-            <div
-              key={idx}
-              className={cn(
-                "rounded-[20px] md:rounded-[35px] overflow-hidden bg-gray-200 dark:bg-gray-800 shadow-lg cursor-pointer group relative transition-colors duration-500",
-                idx === 1 ? "aspect-[3/5.5] -mt-8 md:-mt-16 border-2 border-emerald-500/40 z-10 shadow-2xl" : "aspect-[3/4.5]"
-              )}
-              onClick={() => openDetail(item.url)}
-            >
-              <img
-                src={item.url}
+          {gridItems.map((item, idx) => {
+            const vid = isVideo(item);
+            const isCenterVideo = idx === 1 && vid;
+            const aspectClass = idx === 1
+              ? (isCenterVideo ? "aspect-[9/16]" : "aspect-[3/5.5]")
+              : "aspect-[3/4.5]";
+            const offsetClass = idx === 1 ? "-mt-8 md:-mt-16 border-2 border-emerald-500/40 z-10 shadow-2xl" : "";
+
+            return (
+              <div
+                key={idx}
                 className={cn(
-                  "w-full h-full object-cover group-hover:scale-105 transition duration-700",
-                  idx !== 1 && "grayscale group-hover:grayscale-0"
+                  "rounded-[20px] md:rounded-[35px] overflow-hidden bg-gray-200 dark:bg-gray-800 shadow-lg cursor-pointer group relative transition-all duration-700",
+                  aspectClass,
+                  offsetClass
                 )}
-                alt={`Media ${idx + 1}`}
-              />
-              <div className="absolute inset-0 flex items-end justify-center pb-4">
-                <span className="text-white text-[8px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 px-3 py-1 rounded-full">🔍 Lihat Detail</span>
+                onClick={() => openDetail(item.imageUrl, item.caption)}
+              >
+                {vid ? (
+                  <video
+                    src={item.imageUrl}
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+                    muted
+                    autoPlay
+                    loop
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={item.imageUrl}
+                    className={cn(
+                      "w-full h-full object-cover group-hover:scale-105 transition duration-700",
+                      idx !== 1 && "grayscale group-hover:grayscale-0"
+                    )}
+                    alt={`Media ${idx + 1}`}
+                  />
+                )}
+                <div className="absolute inset-0 flex items-end justify-center pb-4">
+                  <span className="text-white text-[8px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 px-3 py-1 rounded-full">🔍 Lihat Detail</span>
+                </div>
               </div>
-            </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Faculty Cards Section */}
+      <section className="px-4 md:px-10 pb-10 pt-6">
+        <div className="mb-6 text-center">
+          <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-emerald-500 mb-1">AKADEMIK</p>
+          <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">
+            Fakultas Kami
+          </h2>
+        </div>
+        <div className="grid grid-cols-4 gap-2 md:gap-4 max-w-5xl mx-auto">
+          {FACULTY_CARDS.map((fac) => (
+            <button
+              key={fac.id}
+              onClick={() => setActiveTab(fac.id)}
+              className={cn(
+                "group relative rounded-2xl md:rounded-3xl overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl text-left",
+                `bg-gradient-to-br ${fac.color} ${fac.border}`
+              )}
+            >
+              <div className="p-3 md:p-5 flex flex-col gap-1 md:gap-2">
+                <span className="text-2xl md:text-3xl">{fac.icon}</span>
+                <div>
+                  <p className={cn("text-[9px] md:text-[10px] font-black uppercase tracking-widest leading-tight", fac.accent)}>
+                    {fac.short}
+                  </p>
+                  <p className="text-[7px] md:text-[8px] text-gray-500 dark:text-gray-400 font-medium leading-tight mt-0.5 hidden md:block">
+                    {fac.full}
+                  </p>
+                </div>
+                <svg className={cn("w-3 h-3 md:w-4 md:h-4 mt-1 transition-transform duration-300 group-hover:translate-x-1", fac.accent)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </div>
+            </button>
           ))}
         </div>
       </section>
@@ -134,10 +283,8 @@ export function HomeTab({ setActiveTab, openDetail }: HomeTabProps) {
       {/* CTA Section — PENERIMAAN MAHASISWA BARU */}
       <section className="px-6 md:px-10 pb-20 pt-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start bg-card p-8 md:p-12 rounded-[40px] border border-border shadow-2xl relative overflow-hidden transition-colors duration-500">
-          {/* Background glow */}
           <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-          {/* Left: Text content */}
           <div className="relative z-10">
             <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter leading-[0.85] mb-6">
               <span className="text-outline block mb-2">{homeContent.cta.heading1}</span>
@@ -173,9 +320,7 @@ export function HomeTab({ setActiveTab, openDetail }: HomeTabProps) {
             </button>
           </div>
 
-          {/* Right: Image with floating stats INSIDE the container */}
           <div className="relative w-full mx-auto mt-4 lg:mt-0" style={{ maxWidth: 380 }}>
-            {/* Main image */}
             <div
               className="w-full aspect-square rounded-[40px] overflow-hidden border border-black/10 dark:border-white/10 bg-white dark:bg-[#0d0d0d] shadow-2xl cursor-pointer group transition-colors duration-500"
               onClick={() => openDetail(homeContent.cta.cardImage)}
@@ -188,7 +333,6 @@ export function HomeTab({ setActiveTab, openDetail }: HomeTabProps) {
               <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-transparent mix-blend-overlay pointer-events-none"></div>
             </div>
 
-            {/* Floating badge 1 — students count */}
             <div className="absolute top-4 left-4 glass-element bg-white/70 dark:bg-black/70 border border-black/10 dark:border-white/10 rounded-2xl px-4 py-3 shadow-2xl backdrop-blur-xl animate-float transition-colors duration-500">
               <h4 className="text-2xl md:text-3xl font-black italic text-emerald-500 tracking-tighter drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">
                 {homeContent.cta.statStudents.split(' ')[0]}
@@ -198,7 +342,6 @@ export function HomeTab({ setActiveTab, openDetail }: HomeTabProps) {
               </p>
             </div>
 
-            {/* Floating badge 2 — rating */}
             <div className="absolute bottom-4 right-4 glass-element bg-white/70 dark:bg-black/70 border border-black/10 dark:border-white/10 rounded-2xl px-4 py-3 shadow-2xl backdrop-blur-xl flex flex-col items-center animate-float-slow transition-colors duration-500">
               <div className="flex gap-0.5 text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]">
                 {[1,2,3,4,5].map(i => (
@@ -210,6 +353,12 @@ export function HomeTab({ setActiveTab, openDetail }: HomeTabProps) {
           </div>
         </div>
       </section>
+
+      <GallerySection />
+      <RecentNewsSection
+        setActiveTab={(tab) => setActiveTab(tab as TabType)}
+        onOpenNews={onOpenNewsPost ? (post) => onOpenNewsPost(post.id) : undefined}
+      />
     </div>
   );
 }

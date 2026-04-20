@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import logoUnb from '@/assets/logo-unb.png';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { languages, Language } from '../lib/translations';
@@ -108,9 +109,7 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
         className="flex items-center gap-2 cursor-pointer flex-1 justify-start"
         onClick={() => handleTabClick('home')}
       >
-        <div className="w-7 h-7 md:w-8 md:h-8 border-2 border-black dark:border-white rounded-lg flex items-center justify-center font-black italic text-[10px] md:text-xs text-black dark:text-white transition-colors duration-500">
-          UNB
-        </div>
+        <img src={logoUnb} alt="Logo UNB" className="w-8 h-8 md:w-9 md:h-9 object-contain" />
         <span className="font-bold text-[10px] tracking-tighter uppercase text-black dark:text-white transition-colors duration-500 whitespace-nowrap">Univ. Nusa Bangsa</span>
       </div>
 

@@ -109,10 +109,10 @@ function getMonth(iso: string) {
 
 const MONTH_NAMES = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 
-export function NewsTab() {
+export function NewsTab({ initialPostId }: { initialPostId?: string | null }) {
   const { t } = useLanguage();
   const { settings } = useSettings();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(initialPostId ?? null);
 
   // Filters & pagination
   const [search, setSearch] = useState("");

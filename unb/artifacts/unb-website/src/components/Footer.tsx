@@ -1,9 +1,11 @@
+import logoUnb from "@/assets/logo-unb.png";
+
 export function Footer() {
   return (
     <footer className="px-6 md:px-10 py-10 border-t border-black/5 dark:border-white/5 bg-gray-50/50 dark:bg-[#141414] transition-colors duration-500">
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 border-2 border-black dark:border-white rounded-lg flex items-center justify-center font-black italic text-[10px] text-black dark:text-white transition-colors duration-500">UNB</div>
+          <img src={logoUnb} alt="Logo UNB" className="w-10 h-10 object-contain" />
           <div>
             <p className="font-black italic uppercase text-black dark:text-white text-sm leading-none transition-colors duration-500">Nusa Bangsa</p>
             <p className="text-[8px] text-emerald-500 font-bold uppercase tracking-widest">University · Bogor</p>

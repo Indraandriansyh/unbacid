@@ -184,6 +184,16 @@ export const PIMPINAN_DOSEN: PimpinanDosen[] = [
 
 export function AboutTab() {
   const { t } = useLanguage();
+
+  function jabatanLabel(role: string): string {
+    const map: Record<string, string> = {
+      'Dosen Tetap': t.jabatan.dosen_tetap,
+      'Lektor Kepala': t.jabatan.lektor_kepala,
+      'Lektor': t.jabatan.lektor,
+      'Asisten Ahli': t.jabatan.asisten_ahli,
+    };
+    return map[role] ?? role;
+  }
   const { settings } = useSettings();
   const [selectedPerson, setSelectedPerson] = useState<PimpinanDosen | null>(null);
   const [peopleQuery, setPeopleQuery] = useState("");
@@ -492,7 +502,7 @@ export function AboutTab() {
                 </div>
                 <div className="mt-4">
                   <p className="text-[11px] font-black uppercase tracking-widest text-emerald-500">
-                    {p.role}
+                    {jabatanLabel(p.role)}
                   </p>
                   <h4 className="font-black italic uppercase text-[12px] text-black dark:text-white mt-1 leading-tight transition-colors duration-500">
                     {p.nama}
@@ -572,7 +582,7 @@ export function AboutTab() {
                   </DialogTitle>
                   <div className="mt-2">
                     <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest">
-                      {selectedPerson.role}
+                      {jabatanLabel(selectedPerson.role)}
                     </span>
                   </div>
                   <div className="mt-4 flex justify-center">

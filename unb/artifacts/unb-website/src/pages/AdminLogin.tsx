@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logoUnb from "@/assets/logo-unb.png";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,8 +45,8 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-[#f5f5f5] dark:bg-[#0d0d0d] flex items-center justify-center p-4 selection:bg-emerald-500 selection:text-white">
       <div className="w-full max-w-md animate-fade-in">
         <div className="flex justify-center mb-8">
-          <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20 rotate-3">
-            <ShieldCheck className="w-10 h-10 text-white" />
+          <div className="w-20 h-20 flex items-center justify-center">
+            <img src={logoUnb} alt="Logo UNB" className="w-20 h-20 object-contain" />
           </div>
         </div>
 

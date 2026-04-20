@@ -64,7 +64,7 @@ async function buildAll() {
       "process.env.NODE_ENV": '"production"',
     },
     minify: true,
-    external: externals,
+    external: ["pg-native"],
     logLevel: "info",
   });
 }

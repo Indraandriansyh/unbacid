@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { MediaBanner } from "../components/MediaBanner";
 import { useSettings } from "@/contexts/SettingsContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Dialog,
   DialogContent,
@@ -276,6 +277,7 @@ interface BkkPageTabProps {
 
 export function BkkPageTab({ pageId }: BkkPageTabProps) {
   const { settings } = useSettings();
+  const { t } = useLanguage();
   const [selectedCard, setSelectedCard] = useState<BkkCard | null>(null);
 
   const config = PAGE_CONFIG[pageId];
@@ -298,7 +300,7 @@ export function BkkPageTab({ pageId }: BkkPageTabProps) {
             BKK — Universitas Nusa Bangsa
           </p>
           <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500 mt-3">
-            {config.label}
+            {(t.menu as any)[pageId] ?? config.label}
           </h2>
         </div>
 

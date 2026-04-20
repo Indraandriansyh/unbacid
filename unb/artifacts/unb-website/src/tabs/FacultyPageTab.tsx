@@ -562,7 +562,7 @@ export function FacultyPageTab({ setActiveTab, facultyId }: FacultyPageTabProps)
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="bg-card border border-white/10 rounded-[35px] p-8 shadow-2xl transition-colors duration-500">
             <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white transition-colors duration-500">
-              Visi
+              {t.faculty.vision}
             </h2>
             <p className="text-[10px] text-gray-300 font-bold leading-relaxed mt-4 transition-colors duration-500">
               {faculty.vision}
@@ -570,7 +570,7 @@ export function FacultyPageTab({ setActiveTab, facultyId }: FacultyPageTabProps)
           </div>
           <div className="bg-card border border-white/10 rounded-[35px] p-8 shadow-2xl transition-colors duration-500">
             <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white transition-colors duration-500">
-              Misi
+              {t.faculty.mission}
             </h2>
             <ul className="mt-4 text-[10px] text-gray-300 font-bold leading-relaxed space-y-2 transition-colors duration-500">
               {faculty.missions.map((m) => (

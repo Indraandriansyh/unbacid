@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import logoUnb from "@/assets/logo-unb.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -108,7 +109,7 @@ export default function FakultasAdminDashboard() {
     <>
       <div className="p-4 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2 mb-1">
-          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+          <img src={logoUnb} alt="Logo UNB" className="w-5 h-5 object-contain" />
           <span className="font-extrabold text-emerald-600 dark:text-emerald-400 text-xs uppercase tracking-wider">Admin Fakultas</span>
         </div>
         <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 leading-snug">{facultyName}</p>

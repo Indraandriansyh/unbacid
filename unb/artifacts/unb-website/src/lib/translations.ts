@@ -150,6 +150,66 @@ export const translations = {
       title: 'BERITA KAMPUS',
       subtitle: 'Informasi dan Kabar Terbaru dari Universitas Nusa Bangsa',
       readMore: 'BACA SELENGKAPNYA'
+    },
+    home: {
+      campusInfo: 'INFORMASI KAMPUS',
+      latestNews: 'Berita Terkini',
+      viewAll: 'Lihat Semua'
+    },
+    social: {
+      stayConnected: 'TETAP TERHUBUNG',
+      followUs: 'Ikuti Kami di Media Sosial',
+      followDesc: 'Dapatkan informasi terbaru seputar kampus, kegiatan, dan pengumuman penting langsung dari akun resmi UNB.'
+    },
+    pusdi: {
+      foreword: 'Kata Pengantar',
+      purpose: 'Tujuan',
+      func: 'Fungsi',
+      activity: 'Bidang Kegiatan',
+      partner: 'Mitra Kerja Potensial',
+      staff: 'Staf Pendukung',
+      legal: 'Legalitas',
+      facility: 'Fasilitas',
+      expert: 'Pengalaman Pakar',
+      agraria: 'Agraria dan Pertanahan',
+      spatial: 'Tataruang dan Pengembangan Wilayah',
+      institutional: 'Pengembangan Kelembagaan',
+      education: 'Penyelenggaraan Pendidikan',
+      personnel: 'Personil Tenaga Ahli',
+      purposeSub: 'Pusdi AGRATARU bertujuan:',
+      funcSub: 'Pusdi AGRATARU berfungsi sebagai sarana:',
+      activitySub: 'Kegiatan Pusdi AGRATARU mencakup:'
+    },
+    faculty: {
+      vision: 'Visi',
+      mission: 'Misi'
+    },
+    jabatan: {
+      dosen_tetap: 'Dosen Tetap',
+      lektor_kepala: 'Lektor Kepala',
+      lektor: 'Lektor',
+      asisten_ahli: 'Asisten Ahli'
+    },
+    regExtra: {
+      flow: 'Alur Pendaftaran',
+      flowSub: 'Langkah Mudah Bergabung Bersama Kami',
+      tracks: 'Jalur Pendaftaran',
+      tracksSub: 'Pilih Jalur Yang Sesuai Dengan Kualifikasi Anda',
+      timing: 'Waktu Pendaftaran',
+      timingSub: 'Tahun Akademik 2026/2027',
+      timingOpen: 'Pendaftaran Dibuka',
+      tuitionTitle: 'Detail Biaya Pendidikan',
+      tuitionSub: 'Estimasi Biaya Semester I',
+      tuitionNote: '* Biaya sewaktu-waktu dapat berubah sesuai kebijakan universitas. SPS (Sumbangan Pengembangan Studi) dibayarkan sekali di awal pendaftaran.',
+      manualReg: 'Pendaftaran Manual',
+      manualDesc: 'Anda juga dapat mendaftar secara langsung dengan mengunduh dan mengisi formulir pendaftaran fisik, kemudian membawanya ke bagian pendaftaran di kampus kami.',
+      registerNow: 'Daftar Sekarang',
+      comingSoon: 'Coming Soon',
+      downloadForm: 'Unduh Formulir Pendaftaran (PDF)',
+      downloadBrochure: 'Unduh Brosur',
+      viewDetail: 'Lihat Detail',
+      brochureNA: 'Brosur Belum Tersedia',
+      formNA: 'Formulir Belum Tersedia'
     }
   },
   en: {
@@ -290,6 +350,66 @@ export const translations = {
       title: 'CAMPUS NEWS',
       subtitle: 'Latest Information and Updates from Nusa Bangsa University',
       readMore: 'READ MORE'
+    },
+    home: {
+      campusInfo: 'CAMPUS INFO',
+      latestNews: 'Latest News',
+      viewAll: 'View All'
+    },
+    social: {
+      stayConnected: 'STAY CONNECTED',
+      followUs: 'Follow Us on Social Media',
+      followDesc: "Get the latest information about campus, activities, and important announcements directly from UNB's official accounts."
+    },
+    pusdi: {
+      foreword: 'Foreword',
+      purpose: 'Purpose',
+      func: 'Function',
+      activity: 'Areas of Activity',
+      partner: 'Potential Work Partners',
+      staff: 'Support Staff',
+      legal: 'Legal Basis',
+      facility: 'Facilities',
+      expert: 'Expert Experience',
+      agraria: 'Agrarian and Land Affairs',
+      spatial: 'Spatial Planning and Regional Development',
+      institutional: 'Institutional Development',
+      education: 'Educational Implementation',
+      personnel: 'Expert Personnel',
+      purposeSub: 'Pusdi AGRATARU aims to:',
+      funcSub: 'Pusdi AGRATARU serves as a means to:',
+      activitySub: 'Pusdi AGRATARU activities include:'
+    },
+    faculty: {
+      vision: 'Vision',
+      mission: 'Mission'
+    },
+    jabatan: {
+      dosen_tetap: 'Permanent Lecturer',
+      lektor_kepala: 'Associate Professor',
+      lektor: 'Lecturer',
+      asisten_ahli: 'Assistant Lecturer'
+    },
+    regExtra: {
+      flow: 'Registration Process',
+      flowSub: 'Simple Steps to Join Us',
+      tracks: 'Registration Tracks',
+      tracksSub: 'Choose the Track That Matches Your Qualifications',
+      timing: 'Registration Schedule',
+      timingSub: 'Academic Year 2026/2027',
+      timingOpen: 'Registration Open',
+      tuitionTitle: 'Tuition Fee Details',
+      tuitionSub: 'Estimated First Semester Fees',
+      tuitionNote: '* Fees are subject to change according to university policy. SPS (Study Development Contribution) is paid once at the beginning of registration.',
+      manualReg: 'Manual Registration',
+      manualDesc: 'You can also register in person by downloading and filling out the physical registration form, then bringing it to the admissions office at our campus.',
+      registerNow: 'Register Now',
+      comingSoon: 'Coming Soon',
+      downloadForm: 'Download Registration Form (PDF)',
+      downloadBrochure: 'Download Brochure',
+      viewDetail: 'View Details',
+      brochureNA: 'Brochure Not Available',
+      formNA: 'Form Not Available'
     }
   },
   su: {
@@ -411,6 +531,66 @@ export const translations = {
       title: 'WARTA KAMPUS',
       subtitle: 'Inpormasi sareng Warta Panganyarna ti Universitas Nusa Bangsa',
       readMore: 'BACA SALAJENGNA'
+    },
+    home: {
+      campusInfo: 'INFORMASI KAMPUS',
+      latestNews: 'Warta Anyar',
+      viewAll: 'Tempo Sadayana'
+    },
+    social: {
+      stayConnected: 'TETAP TERHUBUNG',
+      followUs: 'Tuturkeun Kami di Média Sosial',
+      followDesc: 'Kéngingkeun informasi panganyarna ngeunaan kampus, kagiatan, sareng pengumuman penting ti akun resmi UNB.'
+    },
+    pusdi: {
+      foreword: 'Kata Pengantar',
+      purpose: 'Tujuan',
+      func: 'Fungsi',
+      activity: 'Widang Kagiatan',
+      partner: 'Mitra Kerja Potensial',
+      staff: 'Staf Pendukung',
+      legal: 'Legalitas',
+      facility: 'Fasilitas',
+      expert: 'Pangalaman Pakar',
+      agraria: 'Agraria sareng Pertanahan',
+      spatial: 'Tataruang sareng Pangwangunan Wilayah',
+      institutional: 'Pangwangunan Kelembagaan',
+      education: 'Penyelenggaraan Pendidikan',
+      personnel: 'Personil Tenaga Ahli',
+      purposeSub: 'Pusdi AGRATARU boga tujuan:',
+      funcSub: 'Pusdi AGRATARU berfungsi salaku sarana:',
+      activitySub: 'Kagiatan Pusdi AGRATARU ngawengku:'
+    },
+    faculty: {
+      vision: 'Visi',
+      mission: 'Misi'
+    },
+    jabatan: {
+      dosen_tetap: 'Dosen Tetap',
+      lektor_kepala: 'Lektor Kepala',
+      lektor: 'Lektor',
+      asisten_ahli: 'Asisten Ahli'
+    },
+    regExtra: {
+      flow: 'Alur Pendaptaran',
+      flowSub: 'Léngkah Gampang Gabung Sareng Kami',
+      tracks: 'Jalur Pendaptaran',
+      tracksSub: 'Pilih Jalur Nu Saluyu Sareng Kualifikasi Anjeun',
+      timing: 'Waktu Pendaptaran',
+      timingSub: 'Taun Akademik 2026/2027',
+      timingOpen: 'Pendaptaran Dibuka',
+      tuitionTitle: 'Detail Biaya Pendidikan',
+      tuitionSub: 'Estimasi Biaya Semester I',
+      tuitionNote: '* Biaya tiasa robah saluyu kebijakan universitas. SPS dibayarkeun sakali dina awal pendaptaran.',
+      manualReg: 'Pendaptaran Manual',
+      manualDesc: 'Anjeun oge tiasa daftar langsung ku cara ngunduh sareng ngaisian formulir pendaptaran fisik, teras dibawa ka bagian pendaptaran di kampus kami.',
+      registerNow: 'Daftar Ayeuna',
+      comingSoon: 'Bakal Aya',
+      downloadForm: 'Unduh Formulir Pendaptaran (PDF)',
+      downloadBrochure: 'Unduh Brosur',
+      viewDetail: 'Tempo Detail',
+      brochureNA: 'Brosur Acan Sayogi',
+      formNA: 'Formulir Acan Sayogi'
     }
   },
   jv: {
@@ -528,6 +708,66 @@ export const translations = {
       title: 'PAWARTA KAMPUS',
       subtitle: 'Informasi Paling Anyar saka Universitas Nusa Bangsa',
       readMore: 'WACA LUWIH LENGKAP'
+    },
+    home: {
+      campusInfo: 'INFO KAMPUS',
+      latestNews: 'Berita Paling Anyar',
+      viewAll: 'Deleng Kabeh'
+    },
+    social: {
+      stayConnected: 'TETAP TERHUBUNG',
+      followUs: 'Folo Kita ing Media Sosial',
+      followDesc: 'Jupuk informasi paling anyar babagan kampus, kegiatan, lan pengumuman penting langsung saka akun resmi UNB.'
+    },
+    pusdi: {
+      foreword: 'Pambuka',
+      purpose: 'Tujuan',
+      func: 'Fungsi',
+      activity: 'Bidang Kegiatan',
+      partner: 'Mitra Kerja Potensial',
+      staff: 'Staf Pendukung',
+      legal: 'Legalitas',
+      facility: 'Fasilitas',
+      expert: 'Pengalaman Pakar',
+      agraria: 'Agraria lan Pertanahan',
+      spatial: 'Tataruang lan Pembangunan Wilayah',
+      institutional: 'Pengembangan Kelembagaan',
+      education: 'Penyelenggaraan Pendidikan',
+      personnel: 'Personil Tenaga Ahli',
+      purposeSub: 'Pusdi AGRATARU nduweni tujuan:',
+      funcSub: 'Pusdi AGRATARU berfungsi minangka sarana:',
+      activitySub: 'Kegiatan Pusdi AGRATARU kalebu:'
+    },
+    faculty: {
+      vision: 'Visi',
+      mission: 'Misi'
+    },
+    jabatan: {
+      dosen_tetap: 'Dosen Tetap',
+      lektor_kepala: 'Lektor Kepala',
+      lektor: 'Lektor',
+      asisten_ahli: 'Asisten Ahli'
+    },
+    regExtra: {
+      flow: 'Alur Pendaftaran',
+      flowSub: 'Langkah Gampang Gabung Karo Kita',
+      tracks: 'Jalur Pendaftaran',
+      tracksSub: 'Pilih Jalur Sing Sesuai Karo Kualifikasimu',
+      timing: 'Waktu Pendaftaran',
+      timingSub: 'Taun Akademik 2026/2027',
+      timingOpen: 'Pendaftaran Dibuka',
+      tuitionTitle: 'Detail Biaya Pendidikan',
+      tuitionSub: 'Estimasi Biaya Semester I',
+      tuitionNote: '* Biaya bisa owah sesuai kebijakan universitas. SPS dibayar sepisan ing awal pendaftaran.',
+      manualReg: 'Pendaftaran Manual',
+      manualDesc: 'Sampeyan uga bisa daftar langsung kanthi ngunduh lan ngisi formulir pendaftaran fisik, banjur nggawa menyang bagian pendaftaran ing kampus kita.',
+      registerNow: 'Daftar Saiki',
+      comingSoon: 'Bakal Ana',
+      downloadForm: 'Unduh Formulir Pendaftaran (PDF)',
+      downloadBrochure: 'Unduh Brosur',
+      viewDetail: 'Deleng Detail',
+      brochureNA: 'Brosur Durung Kasedhiya',
+      formNA: 'Formulir Durung Kasedhiya'
     }
   },
   zh: {
@@ -642,6 +882,66 @@ export const translations = {
       title: '校园新闻',
       subtitle: '来自努沙邦萨大学的最新信息和更新',
       readMore: '阅读更多'
+    },
+    home: {
+      campusInfo: '校园信息',
+      latestNews: '最新新闻',
+      viewAll: '查看全部'
+    },
+    social: {
+      stayConnected: '保持联系',
+      followUs: '在社交媒体上关注我们',
+      followDesc: '直接从UNB官方账户获取有关校园、活动和重要公告的最新信息。'
+    },
+    pusdi: {
+      foreword: '前言',
+      purpose: '目标',
+      func: '功能',
+      activity: '活动领域',
+      partner: '潜在合作伙伴',
+      staff: '支持人员',
+      legal: '法律依据',
+      facility: '设施',
+      expert: '专家经验',
+      agraria: '土地与农业事务',
+      spatial: '空间规划与区域发展',
+      institutional: '机构发展',
+      education: '教育实施',
+      personnel: '专业人员',
+      purposeSub: 'Pusdi AGRATARU的目标是：',
+      funcSub: 'Pusdi AGRATARU作为以下手段：',
+      activitySub: 'Pusdi AGRATARU的活动包括：'
+    },
+    faculty: {
+      vision: '愿景',
+      mission: '使命'
+    },
+    jabatan: {
+      dosen_tetap: '常任讲师',
+      lektor_kepala: '副教授',
+      lektor: '讲师',
+      asisten_ahli: '助理讲师'
+    },
+    regExtra: {
+      flow: '注册流程',
+      flowSub: '简单步骤加入我们',
+      tracks: '注册通道',
+      tracksSub: '选择符合您资质的通道',
+      timing: '注册时间',
+      timingSub: '2026/2027学年',
+      timingOpen: '报名开放',
+      tuitionTitle: '学费详情',
+      tuitionSub: '第一学期预估费用',
+      tuitionNote: '* 费用可能根据大学政策随时变动。SPS在注册初期一次性缴纳。',
+      manualReg: '人工注册',
+      manualDesc: '您也可以通过下载并填写纸质注册表格，然后带到我们校园的招生处进行直接注册。',
+      registerNow: '立即注册',
+      comingSoon: '即将推出',
+      downloadForm: '下载注册表格 (PDF)',
+      downloadBrochure: '下载宣传册',
+      viewDetail: '查看详情',
+      brochureNA: '宣传册暂不提供',
+      formNA: '表格暂不提供'
     }
   },
   ja: {
@@ -756,6 +1056,66 @@ export const translations = {
       title: 'キャンパスニュース',
       subtitle: 'ヌサ・バンサ大学からの最新情報とアップデート',
       readMore: '続きを読む'
+    },
+    home: {
+      campusInfo: 'キャンパス情報',
+      latestNews: '最新ニュース',
+      viewAll: 'すべて見る'
+    },
+    social: {
+      stayConnected: 'つながり続ける',
+      followUs: 'ソーシャルメディアでフォローする',
+      followDesc: 'UNBの公式アカウントから、キャンパス、活動、重要なお知らせに関する最新情報を入手してください。'
+    },
+    pusdi: {
+      foreword: 'はじめに',
+      purpose: '目的',
+      func: '機能',
+      activity: '活動領域',
+      partner: '潜在的パートナー',
+      staff: 'サポートスタッフ',
+      legal: '法的根拠',
+      facility: '施設',
+      expert: '専門家の経験',
+      agraria: '農業・土地問題',
+      spatial: '空間計画と地域開発',
+      institutional: '機関開発',
+      education: '教育実施',
+      personnel: '専門人員',
+      purposeSub: 'Pusdi AGRATARUの目的：',
+      funcSub: 'Pusdi AGRATARUは以下の手段として機能します：',
+      activitySub: 'Pusdi AGRATARUの活動には以下が含まれます：'
+    },
+    faculty: {
+      vision: 'ビジョン',
+      mission: 'ミッション'
+    },
+    jabatan: {
+      dosen_tetap: '常任講師',
+      lektor_kepala: '准教授',
+      lektor: '講師',
+      asisten_ahli: '助手'
+    },
+    regExtra: {
+      flow: '登録プロセス',
+      flowSub: '参加するための簡単なステップ',
+      tracks: '登録ルート',
+      tracksSub: '資格に合ったルートを選択してください',
+      timing: '登録スケジュール',
+      timingSub: '2026/2027年度',
+      timingOpen: '受付開始',
+      tuitionTitle: '授業料詳細',
+      tuitionSub: '第1学期推定費用',
+      tuitionNote: '* 料金は大学の方針に従い変更される場合があります。SPSは登録開始時に一度支払われます。',
+      manualReg: '手動登録',
+      manualDesc: '直接登録するには、物理的な登録フォームをダウンロードして記入し、キャンパスの入学センターに持参することもできます。',
+      registerNow: '今すぐ登録',
+      comingSoon: '近日公開',
+      downloadForm: '登録フォームをダウンロード (PDF)',
+      downloadBrochure: 'パンフレットをダウンロード',
+      viewDetail: '詳細を見る',
+      brochureNA: 'パンフレット未提供',
+      formNA: '申請書未提供'
     }
   },
   fr: {
@@ -870,6 +1230,66 @@ export const translations = {
       title: 'ACTUALITÉS DU CAMPUS',
       subtitle: "Dernières Informations et Mises à Jour de l'Université Nusa Bangsa",
       readMore: 'LIRE LA SUITE'
+    },
+    home: {
+      campusInfo: 'INFO CAMPUS',
+      latestNews: 'Dernières Actualités',
+      viewAll: 'Voir Tout'
+    },
+    social: {
+      stayConnected: 'RESTEZ CONNECTÉ',
+      followUs: 'Suivez-nous sur les Réseaux Sociaux',
+      followDesc: "Obtenez les dernières informations sur le campus, les activités et les annonces importantes directement depuis les comptes officiels de l'UNB."
+    },
+    pusdi: {
+      foreword: 'Avant-propos',
+      purpose: 'Objectif',
+      func: 'Fonction',
+      activity: "Domaines d'Activité",
+      partner: 'Partenaires Potentiels',
+      staff: 'Personnel de Soutien',
+      legal: 'Base Juridique',
+      facility: 'Installations',
+      expert: 'Expérience des Experts',
+      agraria: 'Affaires Agraires et Foncières',
+      spatial: 'Planification Spatiale et Développement Régional',
+      institutional: 'Développement Institutionnel',
+      education: "Mise en Œuvre de l'Éducation",
+      personnel: 'Personnel Expert',
+      purposeSub: 'Pusdi AGRATARU vise à :',
+      funcSub: 'Pusdi AGRATARU sert de moyen pour :',
+      activitySub: 'Les activités de Pusdi AGRATARU comprennent :'
+    },
+    faculty: {
+      vision: 'Vision',
+      mission: 'Mission'
+    },
+    jabatan: {
+      dosen_tetap: 'Enseignant Permanent',
+      lektor_kepala: 'Maître de Conférences',
+      lektor: 'Chargé de Cours',
+      asisten_ahli: 'Assistant Enseignant'
+    },
+    regExtra: {
+      flow: "Processus d'Inscription",
+      flowSub: 'Étapes simples pour nous rejoindre',
+      tracks: "Voies d'Inscription",
+      tracksSub: 'Choisissez la voie adaptée à vos qualifications',
+      timing: "Calendrier d'Inscription",
+      timingSub: 'Année Académique 2026/2027',
+      timingOpen: 'Inscription Ouverte',
+      tuitionTitle: 'Détails des Frais de Scolarité',
+      tuitionSub: 'Estimation des Frais du 1er Semestre',
+      tuitionNote: "* Les frais peuvent changer selon les politiques de l'université. Le SPS est payé une fois au début de l'inscription.",
+      manualReg: 'Inscription Manuelle',
+      manualDesc: "Vous pouvez également vous inscrire en personne en téléchargeant et en remplissant le formulaire d'inscription physique, puis en l'apportant au bureau des admissions.",
+      registerNow: "S'inscrire Maintenant",
+      comingSoon: 'Bientôt Disponible',
+      downloadForm: "Télécharger le Formulaire d'Inscription (PDF)",
+      downloadBrochure: 'Télécharger la Brochure',
+      viewDetail: 'Voir les Détails',
+      brochureNA: 'Brochure Non Disponible',
+      formNA: 'Formulaire Non Disponible'
     }
   },
   de: {
@@ -984,6 +1404,66 @@ export const translations = {
       title: 'CAMPUS-NACHRICHTEN',
       subtitle: 'Neueste Informationen und Updates von der Nusa Bangsa Universität',
       readMore: 'MEHR LESEN'
+    },
+    home: {
+      campusInfo: 'CAMPUS-INFO',
+      latestNews: 'Neueste Nachrichten',
+      viewAll: 'Alle Anzeigen'
+    },
+    social: {
+      stayConnected: 'VERBUNDEN BLEIBEN',
+      followUs: 'Folgen Sie uns in den Sozialen Medien',
+      followDesc: 'Erhalten Sie die neuesten Informationen über den Campus, Aktivitäten und wichtige Ankündigungen direkt von den offiziellen Konten der UNB.'
+    },
+    pusdi: {
+      foreword: 'Vorwort',
+      purpose: 'Zweck',
+      func: 'Funktion',
+      activity: 'Tätigkeitsbereiche',
+      partner: 'Potenzielle Arbeitspartner',
+      staff: 'Unterstützungspersonal',
+      legal: 'Rechtliche Grundlage',
+      facility: 'Einrichtungen',
+      expert: 'Expertenerfahrung',
+      agraria: 'Agrar- und Grundstücksangelegenheiten',
+      spatial: 'Raumplanung und Regionalentwicklung',
+      institutional: 'Institutionelle Entwicklung',
+      education: 'Bildungsdurchführung',
+      personnel: 'Fachpersonal',
+      purposeSub: 'Pusdi AGRATARU zielt darauf ab:',
+      funcSub: 'Pusdi AGRATARU dient als Mittel zur:',
+      activitySub: 'Aktivitäten von Pusdi AGRATARU umfassen:'
+    },
+    faculty: {
+      vision: 'Vision',
+      mission: 'Mission'
+    },
+    jabatan: {
+      dosen_tetap: 'Festangestellter Dozent',
+      lektor_kepala: 'Außerordentlicher Professor',
+      lektor: 'Dozent',
+      asisten_ahli: 'Lehrassistent'
+    },
+    regExtra: {
+      flow: 'Registrierungsablauf',
+      flowSub: 'Einfache Schritte, um uns beizutreten',
+      tracks: 'Registrierungswege',
+      tracksSub: 'Wählen Sie den Weg, der Ihren Qualifikationen entspricht',
+      timing: 'Registrierungszeitplan',
+      timingSub: 'Akademisches Jahr 2026/2027',
+      timingOpen: 'Anmeldung offen',
+      tuitionTitle: 'Details der Studiengebühren',
+      tuitionSub: 'Geschätzte Studiengebühren Semester 1',
+      tuitionNote: '* Gebühren können sich entsprechend der Universitätspolitik ändern. SPS wird einmalig zu Beginn der Registrierung bezahlt.',
+      manualReg: 'Manuelle Registrierung',
+      manualDesc: 'Sie können sich auch persönlich registrieren, indem Sie das physische Anmeldeformular herunterladen und ausfüllen und es dann ins Zulassungsbüro unseres Campus bringen.',
+      registerNow: 'Jetzt Registrieren',
+      comingSoon: 'Demnächst',
+      downloadForm: 'Anmeldeformular Herunterladen (PDF)',
+      downloadBrochure: 'Broschüre Herunterladen',
+      viewDetail: 'Details Anzeigen',
+      brochureNA: 'Broschüre Nicht Verfügbar',
+      formNA: 'Formular Nicht Verfügbar'
     }
   }
 };

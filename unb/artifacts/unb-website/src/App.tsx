@@ -20,6 +20,7 @@ import { LpmPageTab } from './tabs/LpmPageTab';
 import { BkkPageTab } from './tabs/BkkPageTab';
 import { BooksTab } from './tabs/BooksTab';
 import { Footer } from './components/Footer';
+import { SocialBanner } from './components/SocialBanner';
 import { ImageModal } from './components/ImageModal';
 import { useLanguage } from '@/contexts/LanguageContext';
 import AdminLogin from './pages/AdminLogin';
@@ -42,10 +43,17 @@ const queryClient = new QueryClient();
 function MainContent() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [modalImg, setModalImg] = useState<string | null>(null);
+  const [modalCaption, setModalCaption] = useState<string | undefined>(undefined);
+  const [pendingPostId, setPendingPostId] = useState<string | null>(null);
   const { t } = useLanguage();
 
-  const openDetail = (src: string) => setModalImg(src);
-  const closeDetail = () => setModalImg(null);
+  const openDetail = (src: string, caption?: string) => { setModalImg(src); setModalCaption(caption); };
+  const closeDetail = () => { setModalImg(null); setModalCaption(undefined); };
+
+  const openNewsPost = (postId: string) => {
+    setPendingPostId(postId);
+    setActiveTab('blog');
+  };
 
   return (
     <div className="bg-[#f5f5f5] dark:bg-[#0d0d0d] py-[10px] md:py-[20px] min-h-screen selection:bg-emerald-500 selection:text-white transition-colors duration-500">
@@ -54,11 +62,11 @@ function MainContent() {
         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
         {/* Pages */}
-        {activeTab === 'home' && <HomeTab setActiveTab={setActiveTab} openDetail={openDetail} />}
+        {activeTab === 'home' && <HomeTab setActiveTab={setActiveTab} openDetail={openDetail} onOpenNewsPost={openNewsPost} />}
         {(activeTab === 'tentang' || activeTab === 'profil') && <AboutTab />}
         {activeTab === 'fakultas' && <FacultiesTab setActiveTab={setActiveTab} />}
         {activeTab === 'pendaftaran' && <RegistrationTab />}
-        {activeTab === 'blog' && <NewsTab />}
+        {activeTab === 'blog' && <NewsTab initialPostId={pendingPostId} />}
         {activeTab === 'layanan' && <NewsTab />}
 
         {/* Sub-menu LPPM */}
@@ -110,12 +118,13 @@ function MainContent() {
         {activeTab === 'hr' && <GenericPageTab title={t.services.hr} />}
         {activeTab === 'repository' && <GenericPageTab title={t.services.repository} />}
 
-        {/* Footer inside container */}
+        {/* Social Media Banner + Footer */}
+        <SocialBanner />
         <Footer />
       </div>
 
       {/* Image Modal */}
-      <ImageModal src={modalImg} onClose={closeDetail} />
+      <ImageModal src={modalImg} caption={modalCaption} onClose={closeDetail} />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import logoUnb from "@/assets/logo-unb.png";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,7 @@ import ProdiManagement, { PRODI_LIST } from "@/components/ProdiManagement";
 import LppmManagement from "@/components/LppmManagement";
 import { LpmManagement } from "@/components/LpmManagement";
 import { BkkManagement } from "@/components/BkkManagement";
+import GalleryManagement from "@/components/GalleryManagement";
 import RegistrationManagement from "@/components/RegistrationManagement";
 import RegistrantsManagement from "@/components/RegistrantsManagement";
 
@@ -133,6 +135,7 @@ export default function AdminDashboard() {
     { id: "profile", label: "Profile", icon: FileText, description: "Kelola konten halaman profil" },
     { id: "data-dosen", label: "Data Dosen", icon: Users, description: "Kelola data dosen & struktur organisasi" },
     { id: "news", label: "Berita", icon: Newspaper, description: "Kelola berita dan kategori" },
+    { id: "gallery", label: "Galeri", icon: ImageIcon, description: "Kelola foto galeri kegiatan" },
   ];
 
   const showSidebarLabels = isMobile ? true : isSidebarOpen;
@@ -210,8 +213,8 @@ export default function AdminDashboard() {
       >
         <div className="h-full flex flex-col">
           <div className="p-6 flex items-center gap-3 border-b border-emerald-50 dark:border-emerald-900/10">
-            <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 shrink-0">
-              <ShieldCheck className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 flex items-center justify-center shrink-0">
+              <img src={logoUnb} alt="Logo UNB" className="w-10 h-10 object-contain" />
             </div>
             {showSidebarLabels ? (
               <div className="font-extrabold text-xl tracking-tight text-emerald-600 dark:text-emerald-500 truncate">
@@ -597,9 +600,16 @@ export default function AdminDashboard() {
                       <CardHeader className="flex flex-row items-center justify-between">
                         <div>
                           <CardTitle className="text-lg">Banner Landscape (Carousel)</CardTitle>
-                          <CardDescription>Ubah gambar atau video pada banner utama</CardDescription>
+                          <CardDescription>Gambar/video berganti setiap 25 detik — bisa tambah lebih dari 3</CardDescription>
                         </div>
-                        <Button variant="outline" size="sm" className="rounded-xl border-emerald-500 text-emerald-500 hover:bg-emerald-50 gap-2">
+                        <Button
+                          variant="outline" size="sm"
+                          className="rounded-xl border-emerald-500 text-emerald-500 hover:bg-emerald-50 gap-2"
+                          onClick={() => setHomeContent({
+                            ...homeContent,
+                            banners: [...homeContent.banners, { type: 'image', url: '' }]
+                          })}
+                        >
                           <Plus className="w-4 h-4" /> Tambah Item
                         </Button>
                       </CardHeader>
@@ -613,38 +623,44 @@ export default function AdminDashboard() {
                                     <Video className="w-8 h-8 opacity-50" />
                                   </div>
                                 ) : (
-                                  <img src={item.url} className="w-full h-full object-cover" alt="" />
+                                  <img src={item.url} className="w-full h-full object-cover" alt="" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                                 )}
                               </div>
                               <div className="flex items-center gap-2">
-                                <select 
-                                  className="text-xs bg-white dark:bg-slate-800 border-none rounded-md p-1"
+                                <select
+                                  className="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-md p-1"
                                   value={item.type}
                                   onChange={(e) => {
                                     const newBanners = [...homeContent.banners];
-                                    newBanners[idx].type = e.target.value as 'image' | 'video';
+                                    newBanners[idx] = { ...newBanners[idx], type: e.target.value as 'image' | 'video' };
                                     setHomeContent({...homeContent, banners: newBanners});
                                   }}
                                 >
-                                  <option value="image">Image</option>
-                                  <option value="video">Video</option>
+                                  <option value="image">🖼 Image</option>
+                                  <option value="video">🎬 Video</option>
                                 </select>
-                                <Input 
-                                  value={item.url} 
-                                  placeholder="Link CDN / URL"
+                                <Input
+                                  value={item.url}
+                                  placeholder="URL gambar / video"
                                   className="h-8 text-xs bg-white dark:bg-slate-800 border-none"
                                   onChange={(e) => {
                                     const newBanners = [...homeContent.banners];
-                                    newBanners[idx].url = e.target.value;
+                                    newBanners[idx] = { ...newBanners[idx], url: e.target.value };
                                     setHomeContent({...homeContent, banners: newBanners});
                                   }}
                                 />
                               </div>
                               <div className="flex gap-2">
-                                <Button size="sm" variant="outline" className="flex-1 h-8 text-[10px] gap-1 rounded-lg">
-                                  <Upload className="w-3 h-3" /> Upload
-                                </Button>
-                                <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-500 rounded-lg">
+                                <span className="flex-1 text-[10px] text-slate-400 flex items-center">Item #{idx + 1}</span>
+                                <Button
+                                  size="sm" variant="ghost"
+                                  className="h-8 w-8 p-0 text-red-500 rounded-lg"
+                                  disabled={homeContent.banners.length <= 1}
+                                  onClick={() => {
+                                    const newBanners = homeContent.banners.filter((_, i) => i !== idx);
+                                    setHomeContent({...homeContent, banners: newBanners});
+                                  }}
+                                >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
                               </div>
@@ -656,29 +672,79 @@ export default function AdminDashboard() {
 
                     {/* Grid Images */}
                     <Card className="border-none shadow-sm bg-white dark:bg-[#1a1a1a] rounded-3xl">
-                      <CardHeader>
-                        <CardTitle className="text-lg">Grid Media (Bawah Banner)</CardTitle>
-                        <CardDescription>3 item media di bawah banner utama</CardDescription>
+                      <CardHeader className="flex flex-row items-center justify-between">
+                        <div>
+                          <CardTitle className="text-lg">Grid Media (Bawah Banner)</CardTitle>
+                          <CardDescription>Tampilkan 3 acak dari pool — gambar/video berganti setiap 25 detik</CardDescription>
+                        </div>
+                        <Button
+                          variant="outline" size="sm"
+                          className="rounded-xl border-emerald-500 text-emerald-500 hover:bg-emerald-50 gap-2"
+                          onClick={() => setHomeContent({
+                            ...homeContent,
+                            gridItems: [...homeContent.gridItems, { type: 'image', url: '' }]
+                          })}
+                        >
+                          <Plus className="w-4 h-4" /> Tambah Item
+                        </Button>
                       </CardHeader>
                       <CardContent className="p-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                           {homeContent.gridItems.map((item, idx) => (
                             <div key={idx} className="bg-slate-50 dark:bg-[#252525] rounded-2xl p-4 space-y-3">
-                              <div className="aspect-[3/4] rounded-lg overflow-hidden bg-slate-200">
-                                <img src={item.url} className="w-full h-full object-cover" alt="" />
+                              <div className="aspect-[3/4] rounded-lg overflow-hidden bg-slate-200 flex items-center justify-center">
+                                {item.type === 'video' ? (
+                                  <div className="w-full h-full flex items-center justify-center bg-slate-800 text-white">
+                                    <Video className="w-8 h-8 opacity-50" />
+                                  </div>
+                                ) : (
+                                  <img src={item.url} className="w-full h-full object-cover" alt="" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                                )}
                               </div>
-                              <Input 
-                                value={item.url} 
-                                placeholder="Link CDN / URL"
+                              <div className="flex items-center gap-2">
+                                <select
+                                  className="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-md p-1"
+                                  value={item.type}
+                                  onChange={(e) => {
+                                    const newGrid = [...homeContent.gridItems];
+                                    newGrid[idx] = { ...newGrid[idx], type: e.target.value as 'image' | 'video' };
+                                    setHomeContent({...homeContent, gridItems: newGrid});
+                                  }}
+                                >
+                                  <option value="image">🖼 Image</option>
+                                  <option value="video">🎬 Video</option>
+                                </select>
+                                <Input
+                                  value={item.url}
+                                  placeholder="URL gambar / video"
+                                  className="h-8 text-xs bg-white dark:bg-slate-800 border-none"
+                                  onChange={(e) => {
+                                    const newGrid = [...homeContent.gridItems];
+                                    newGrid[idx] = { ...newGrid[idx], url: e.target.value };
+                                    setHomeContent({...homeContent, gridItems: newGrid});
+                                  }}
+                                />
+                              </div>
+                              <Input
+                                value={(item as any).caption ?? ''}
+                                placeholder="Keterangan / caption (opsional)"
                                 className="h-8 text-xs bg-white dark:bg-slate-800 border-none"
                                 onChange={(e) => {
                                   const newGrid = [...homeContent.gridItems];
-                                  newGrid[idx].url = e.target.value;
+                                  newGrid[idx] = { ...newGrid[idx], caption: e.target.value };
                                   setHomeContent({...homeContent, gridItems: newGrid});
                                 }}
                               />
-                              <Button size="sm" variant="outline" className="w-full h-8 text-[10px] gap-1 rounded-lg">
-                                <Upload className="w-3 h-3" /> Ganti Gambar
+                              <Button
+                                size="sm" variant="ghost"
+                                className="w-full h-8 text-[10px] gap-1 rounded-lg text-red-500 hover:text-red-600"
+                                disabled={homeContent.gridItems.length <= 3}
+                                onClick={() => {
+                                  const newGrid = homeContent.gridItems.filter((_, i) => i !== idx);
+                                  setHomeContent({...homeContent, gridItems: newGrid});
+                                }}
+                              >
+                                <Trash2 className="w-3 h-3" /> Hapus
                               </Button>
                             </div>
                           ))}
@@ -816,6 +882,7 @@ export default function AdminDashboard() {
           {activeMenu === "profile" && <ProfileManagement />}
           {activeMenu === "data-dosen" && <DataDosenManagement />}
           {activeMenu === "news" && <NewsManagement />}
+          {activeMenu === "gallery" && <GalleryManagement />}
           {activeMenu === "lppm" && <LppmManagement />}
           {activeMenu === "lpm" && (
             <div className="p-6 md:p-8 max-w-5xl">

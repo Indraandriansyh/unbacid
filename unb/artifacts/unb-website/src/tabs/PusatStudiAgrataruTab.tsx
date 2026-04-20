@@ -210,7 +210,7 @@ export function PusatStudiAgrataruTab() {
           <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-gray-50/50 dark:bg-white/5 transition-colors duration-500">
             <CardHeader>
               <CardTitle className="text-2xl font-black italic uppercase text-black dark:text-white">
-                Kata Pengantar
+                {t.pusdi.foreword}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -224,11 +224,11 @@ export function PusatStudiAgrataruTab() {
             <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-white dark:bg-white/5 transition-colors duration-500">
               <CardHeader>
                 <CardTitle className="text-xl font-black italic uppercase text-black dark:text-white">
-                  Tujuan
+                  {t.pusdi.purpose}
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
-                <div className="font-bold text-emerald-500 mb-3">Pusdi AGRATARU bertujuan:</div>
+                <div className="font-bold text-emerald-500 mb-3">{t.pusdi.purposeSub}</div>
                 <ul className="list-disc list-inside space-y-2">
                   {content.tujuan.map((item, idx) => (
                     <li key={idx}>{item}</li>
@@ -240,11 +240,11 @@ export function PusatStudiAgrataruTab() {
             <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-white dark:bg-white/5 transition-colors duration-500">
               <CardHeader>
                 <CardTitle className="text-xl font-black italic uppercase text-black dark:text-white">
-                  Fungsi
+                  {t.pusdi.func}
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
-                <div className="font-bold text-emerald-500 mb-3">Pusdi AGRATARU berfungsi sebagai sarana:</div>
+                <div className="font-bold text-emerald-500 mb-3">{t.pusdi.funcSub}</div>
                 <ul className="list-disc list-inside space-y-2">
                   {content.fungsi.map((item, idx) => (
                     <li key={idx}>{item}</li>
@@ -257,11 +257,11 @@ export function PusatStudiAgrataruTab() {
           <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-gray-50/50 dark:bg-white/5 transition-colors duration-500">
             <CardHeader>
               <CardTitle className="text-2xl font-black italic uppercase text-black dark:text-white">
-                Bidang Kegiatan
+                {t.pusdi.activity}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
-              <div className="font-bold text-emerald-500 mb-3">Kegiatan Pusdi AGRATARU mencakup:</div>
+              <div className="font-bold text-emerald-500 mb-3">{t.pusdi.activitySub}</div>
               <ul className="list-disc list-inside space-y-2">
                 {content.bidangKegiatan.map((item, idx) => (
                   <li key={idx}>{item}</li>
@@ -273,7 +273,7 @@ export function PusatStudiAgrataruTab() {
           <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-gray-50/50 dark:bg-white/5 transition-colors duration-500">
             <CardHeader>
               <CardTitle className="text-2xl font-black italic uppercase text-black dark:text-white">
-                Mitra Kerja Potensial
+                {t.pusdi.partner}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -288,7 +288,7 @@ export function PusatStudiAgrataruTab() {
           <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-gray-50/50 dark:bg-white/5 transition-colors duration-500">
             <CardHeader>
               <CardTitle className="text-2xl font-black italic uppercase text-black dark:text-white">
-                Staf Pendukung
+                {t.pusdi.staff}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -302,7 +302,7 @@ export function PusatStudiAgrataruTab() {
             <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-white dark:bg-white/5 transition-colors duration-500">
               <CardHeader>
                 <CardTitle className="text-xl font-black italic uppercase text-black dark:text-white">
-                  Legalitas
+                  {t.pusdi.legal}
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -313,7 +313,7 @@ export function PusatStudiAgrataruTab() {
             <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-white dark:bg-white/5 transition-colors duration-500">
               <CardHeader>
                 <CardTitle className="text-xl font-black italic uppercase text-black dark:text-white">
-                  Fasilitas
+                  {t.pusdi.facility}
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -325,7 +325,7 @@ export function PusatStudiAgrataruTab() {
           <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-gray-50/50 dark:bg-white/5 transition-colors duration-500">
             <CardHeader>
               <CardTitle className="text-2xl font-black italic uppercase text-black dark:text-white">
-                Pengalaman Pakar
+                {t.pusdi.expert}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6 text-sm text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -337,7 +337,7 @@ export function PusatStudiAgrataruTab() {
                 <Card className="border border-black/5 dark:border-white/10 rounded-[28px] bg-white dark:bg-white/5 transition-colors duration-500">
                   <CardHeader>
                     <CardTitle className="text-lg font-black italic uppercase text-black dark:text-white">
-                      Agraria dan Pertanahan
+                      {t.pusdi.agraria}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -352,7 +352,7 @@ export function PusatStudiAgrataruTab() {
                 <Card className="border border-black/5 dark:border-white/10 rounded-[28px] bg-white dark:bg-white/5 transition-colors duration-500">
                   <CardHeader>
                     <CardTitle className="text-lg font-black italic uppercase text-black dark:text-white">
-                      Tataruang dan Pengembangan Wilayah
+                      {t.pusdi.spatial}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -367,7 +367,7 @@ export function PusatStudiAgrataruTab() {
                 <Card className="border border-black/5 dark:border-white/10 rounded-[28px] bg-white dark:bg-white/5 transition-colors duration-500">
                   <CardHeader>
                     <CardTitle className="text-lg font-black italic uppercase text-black dark:text-white">
-                      Pengembangan Kelembagaan
+                      {t.pusdi.institutional}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -382,7 +382,7 @@ export function PusatStudiAgrataruTab() {
                 <Card className="border border-black/5 dark:border-white/10 rounded-[28px] bg-white dark:bg-white/5 transition-colors duration-500">
                   <CardHeader>
                     <CardTitle className="text-lg font-black italic uppercase text-black dark:text-white">
-                      Penyelenggaraan Pendidikan
+                      {t.pusdi.education}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-500">
@@ -400,7 +400,7 @@ export function PusatStudiAgrataruTab() {
           <Card className="border border-black/5 dark:border-white/10 rounded-[35px] bg-gray-50/50 dark:bg-white/5 transition-colors duration-500">
             <CardHeader>
               <CardTitle className="text-2xl font-black italic uppercase text-black dark:text-white">
-                Personil Tenaga Ahli
+                {t.pusdi.personnel}
               </CardTitle>
             </CardHeader>
             <CardContent>

@@ -256,8 +256,8 @@ export function RegistrationTab() {
         {/* Alur Pendaftaran */}
         <div className="mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">Alur Pendaftaran</h2>
-            <p className="text-emerald-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-2">Langkah Mudah Bergabung Bersama Kami</p>
+            <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">{t.regExtra.flow}</h2>
+            <p className="text-emerald-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-2">{t.regExtra.flowSub}</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative">
@@ -294,8 +294,8 @@ export function RegistrationTab() {
         {/* Jalur Pendaftaran */}
         <div className="mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">Jalur Pendaftaran</h2>
-            <p className="text-emerald-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-2">Pilih Jalur Yang Sesuai Dengan Kualifikasi Anda</p>
+            <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">{t.regExtra.tracks}</h2>
+            <p className="text-emerald-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-2">{t.regExtra.tracksSub}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -330,12 +330,12 @@ export function RegistrationTab() {
         <div className="mb-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
             <div>
-              <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">Waktu Pendaftaran</h2>
-              <p className="text-emerald-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-2">Tahun Akademik 2026/2027</p>
+              <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">{t.regExtra.timing}</h2>
+              <p className="text-emerald-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-2">{t.regExtra.timingSub}</p>
             </div>
             <div className="bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-2xl flex items-center gap-3 transition-colors duration-500">
               <CalendarDays size={16} className="text-emerald-500" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Pendaftaran Dibuka</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">{t.regExtra.timingOpen}</span>
             </div>
           </div>
 
@@ -368,7 +368,7 @@ export function RegistrationTab() {
                 </p>
 
                 <div className={`flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] transition-colors duration-500 ${wave.active ? 'text-emerald-300' : 'text-emerald-500/40'}`}>
-                  {wave.active ? 'Daftar Sekarang' : 'Coming Soon'}
+                  {wave.active ? t.regExtra.registerNow : t.regExtra.comingSoon}
                   <ArrowRight size={12} className={wave.active ? 'text-emerald-400' : 'text-emerald-900'} />
                 </div>
               </div>
@@ -380,8 +380,8 @@ export function RegistrationTab() {
         <div className="mb-20">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
             <div>
-              <h2 className="text-2xl md:text-4xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">Detail Biaya Pendidikan</h2>
-              <p className="text-emerald-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-1">Estimasi Biaya Semester I</p>
+              <h2 className="text-2xl md:text-4xl font-black italic uppercase tracking-tighter text-black dark:text-white transition-colors duration-500">{t.regExtra.tuitionTitle}</h2>
+              <p className="text-emerald-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-1">{t.regExtra.tuitionSub}</p>
             </div>
             {regContent.brochureUrl ? (
               <a
@@ -391,12 +391,12 @@ export function RegistrationTab() {
                 className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-emerald-500/20 transition-all group"
               >
                 <Download size={16} className="group-hover:scale-110 transition-transform" />
-                Unduh Brosur
+                {t.regExtra.downloadBrochure}
               </a>
             ) : (
               <button disabled className="flex items-center gap-2 bg-white/5 text-emerald-500/40 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/10 cursor-not-allowed">
                 <Download size={16} />
-                Brosur Belum Tersedia
+                {t.regExtra.brochureNA}
               </button>
             )}
           </div>
@@ -433,7 +433,7 @@ export function RegistrationTab() {
               </table>
             </div>
             <div className="p-4 bg-black/20 transition-colors duration-500">
-              <p className="text-[9px] text-emerald-500/60 italic font-medium">* Biaya sewaktu-waktu dapat berubah sesuai kebijakan universitas. SPS (Sumbangan Pengembangan Studi) dibayarkan sekali di awal pendaftaran.</p>
+              <p className="text-[9px] text-emerald-500/60 italic font-medium">{t.regExtra.tuitionNote}</p>
             </div>
           </div>
         </div>
@@ -560,11 +560,11 @@ export function RegistrationTab() {
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
                 <FileEdit size={24} />
               </div>
-              <h3 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-white transition-colors duration-500">Pendaftaran Manual</h3>
+              <h3 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-white transition-colors duration-500">{t.regExtra.manualReg}</h3>
             </div>
             
             <p className="text-sm text-gray-300 mb-10 leading-relaxed relative z-10 transition-colors duration-500">
-              Anda juga dapat mendaftar secara langsung dengan mengunduh dan mengisi formulir pendaftaran fisik, kemudian membawanya ke bagian pendaftaran di kampus kami.
+              {t.regExtra.manualDesc}
             </p>
 
             {regContent.formUrl ? (
@@ -575,12 +575,12 @@ export function RegistrationTab() {
                 className="flex items-center gap-3 bg-white/5 hover:bg-white/10 text-white px-7 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 group/btn relative z-10"
               >
                 <Download size={18} className="text-emerald-400 group-hover/btn:scale-110 transition-transform" />
-                Unduh Formulir Pendaftaran (PDF)
+                {t.regExtra.downloadForm}
               </a>
             ) : (
               <button disabled className="flex items-center gap-3 bg-white/5 text-white/30 px-7 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/10 cursor-not-allowed relative z-10">
                 <Download size={18} className="text-emerald-400/40" />
-                Formulir Belum Tersedia
+                {t.regExtra.formNA}
               </button>
             )}
           </div>

@@ -6,6 +6,7 @@ type SiteSettings = {
   homeContent?: any;
   profileContent?: any;
   newsContent?: any;
+  galleryContent?: any;
 };
 
 interface SettingsContextType {

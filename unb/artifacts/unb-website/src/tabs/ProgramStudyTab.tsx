@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { MediaBanner } from "../components/MediaBanner";
 import { useSettings } from "@/contexts/SettingsContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import type { TabType } from "../types";
 import { PIMPINAN_DOSEN } from "./AboutTab";
 import {
@@ -364,6 +365,7 @@ interface ProgramStudyTabProps {
 }
 
 export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProps) {
+  const { t } = useLanguage();
   const [openAccred, setOpenAccred] = useState(false);
   const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null);
   const [openGalleryIndex, setOpenGalleryIndex] = useState<number | null>(null);
@@ -441,7 +443,7 @@ export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProp
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="bg-card border border-white/10 rounded-[35px] p-8 shadow-2xl transition-colors duration-500">
             <h3 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white transition-colors duration-500">
-              Visi
+              {t.faculty.vision}
             </h3>
             <p className="text-[10px] text-gray-300 font-bold leading-relaxed mt-4 transition-colors duration-500">
               {page.vision}
@@ -449,7 +451,7 @@ export function ProgramStudyTab({ setActiveTab, programId }: ProgramStudyTabProp
           </div>
           <div className="bg-card border border-white/10 rounded-[35px] p-8 shadow-2xl transition-colors duration-500">
             <h3 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white transition-colors duration-500">
-              Misi
+              {t.faculty.mission}
             </h3>
             <ul className="mt-4 text-[10px] text-gray-300 font-bold leading-relaxed space-y-2 transition-colors duration-500">
               {page.missions.map((m) => (
