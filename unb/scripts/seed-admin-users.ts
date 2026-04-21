@@ -29,7 +29,7 @@ const admins = [
   // Prodi — FST
   { username: "admin_biologi", password: "Prodi@Biologi2025", role: "prodi", scopeId: "biologi-s1", displayName: "Admin Prodi Biologi", createdBy: "admin_fst" },
   { username: "admin_kimia", password: "Prodi@Kimia2025", role: "prodi", scopeId: "kimia-s1", displayName: "Admin Prodi Kimia", createdBy: "admin_fst" },
-  { username: "admin_datasains", password: "Prodi@DataSains2025", role: "prodi", scopeId: "data-sains-s1", displayName: "Admin Prodi Data Sains", createdBy: "admin_fst" },
+  { username: "admin_datasains", password: "Prodi@DataSains2025", role: "prodi", scopeId: "data-sains-s1", displayName: "Admin Prodi Sains Data", createdBy: "admin_fst" },
   // Prodi — PPS
   { username: "admin_magmanajemen", password: "Prodi@MagManajemen2025", role: "prodi", scopeId: "magister-manajemen-s2", displayName: "Admin Prodi Magister Manajemen", createdBy: "admin_pps" },
   { username: "admin_magagribisnis", password: "Prodi@MagAgribisnis2025", role: "prodi", scopeId: "magister-agribisnis-s2", displayName: "Admin Prodi Magister Agribisnis", createdBy: "admin_pps" },

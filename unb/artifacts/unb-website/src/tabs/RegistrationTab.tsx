@@ -130,7 +130,7 @@ type FormValues = z.infer<typeof formSchema>;
 const FACULTY_PROGRAMS: Record<string, string[]> = {
   "Fakultas Ekonomi & Bisnis": ["Manajemen", "Akutansi", "Magister Ekonomi Pembangunan (Pascasarjana)"],
   "Fakultas Agroteknopreneur & Agraria": ["Agroteknologi", "Agribisnis"],
-  "Fakultas Sains & Teknologi": ["Kimia", "Biologi", "Data Sains"],
+  "Fakultas Sains & Teknologi": ["Kimia", "Biologi", "Sains Data"],
   "Fakultas Kehutanan & Lingkungan": ["Kehutanan & Lingkungan"]
 };
 
@@ -171,7 +171,7 @@ export const DEFAULT_REGISTRATION_CONTENT: RegistrationContent = {
     { no: "III", faculty: "Fakultas Sains & Teknologi", programs: [
       { name: "Kimia", reguler: "5,150,000", ekstensi: "6,275,000" },
       { name: "Biologi", reguler: "5,245,000", ekstensi: "6,370,000" },
-      { name: "Data Sains", reguler: "5,300,000", ekstensi: "6,500,000" },
+      { name: "Sains Data", reguler: "5,300,000", ekstensi: "6,500,000" },
     ]},
     { no: "IV", faculty: "Fakultas Kehutanan & Lingkungan", programs: [
       { name: "Kehutanan & Lingkungan", reguler: "5,520,000", ekstensi: "6,810,000" },
@@ -239,6 +239,13 @@ export function RegistrationTab() {
       title: "Pendaftaran Berhasil!",
       description: "Terima kasih! Pendaftaran Anda sedang diproses. Kami akan menghubungi Anda segera.",
       className: "bg-emerald-500 border-none text-white font-bold shadow-2xl"
+    });
+  };
+
+  const scrollToRegistrationForm = () => {
+    document.getElementById("formulir-pendaftaran-online")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
     });
   };
 
@@ -367,10 +374,21 @@ export function RegistrationTab() {
                   {wave.date}
                 </p>
 
-                <div className={`flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] transition-colors duration-500 ${wave.active ? 'text-emerald-300' : 'text-emerald-500/40'}`}>
-                  {wave.active ? t.regExtra.registerNow : t.regExtra.comingSoon}
-                  <ArrowRight size={12} className={wave.active ? 'text-emerald-400' : 'text-emerald-900'} />
-                </div>
+                {wave.active ? (
+                  <button
+                    type="button"
+                    onClick={scrollToRegistrationForm}
+                    className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-300 hover:text-white transition-colors duration-500"
+                  >
+                    {t.regExtra.registerNow}
+                    <ArrowRight size={12} className="text-emerald-400" />
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500/40 transition-colors duration-500">
+                    {t.regExtra.comingSoon}
+                    <ArrowRight size={12} className="text-emerald-900" />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -445,7 +463,7 @@ export function RegistrationTab() {
         </div>
 
         {/* Form */}
-        <div className="bg-card border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden max-w-3xl mx-auto transition-colors duration-500">
+        <div id="formulir-pendaftaran-online" className="bg-card border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden max-w-3xl mx-auto transition-colors duration-500 scroll-mt-24">
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none"></div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 relative z-10">

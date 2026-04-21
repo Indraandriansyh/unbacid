@@ -414,7 +414,7 @@ const PROGRAMS: Program[] = [
   },
   {
     id: "data-sains-s1",
-    name: "Data Sains",
+    name: "Sains Data",
     level: "S-1",
     facultyId: "fst",
     description:

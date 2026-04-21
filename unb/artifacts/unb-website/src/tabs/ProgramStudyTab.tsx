@@ -241,7 +241,7 @@ const PROGRAM_PAGES: ProgramPage[] = [
   },
   {
     id: "data-sains-s1",
-    name: "Data Sains",
+    name: "Sains Data",
     level: "S-1",
     facultyName: "Fakultas Sains & Teknologi",
     bannerItems: [

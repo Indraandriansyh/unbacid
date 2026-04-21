@@ -212,7 +212,7 @@ const DEFAULT_PRODI: Record<string, ProdiData> = {
     ],
   },
   "data-sains-s1": {
-    id: "data-sains-s1", name: "Data Sains", level: "S-1", facultyName: "Fakultas Sains & Teknologi",
+    id: "data-sains-s1", name: "Sains Data", level: "S-1", facultyName: "Fakultas Sains & Teknologi",
     vision: "Menjadi program studi data sains yang unggul dalam menghasilkan analis data dan ilmuwan data yang kompeten.",
     missions: [
       "Menyelenggarakan pendidikan data sains berbasis kecerdasan buatan dan big data.",
@@ -221,7 +221,7 @@ const DEFAULT_PRODI: Record<string, ProdiData> = {
     ],
     org: [
       { jabatan: "Dekan", nama: "Dr. Ade Yuniati, M.Si", icon: "🎓" },
-      { jabatan: "Kaprodi Data Sains", nama: "Dr. Budi Hermana, M.Kom", icon: "💻" },
+      { jabatan: "Kaprodi Sains Data", nama: "Dr. Budi Hermana, M.Kom", icon: "💻" },
     ],
     curriculum: [
       { title: "Fokus", items: ["Machine Learning", "Big Data", "Statistika", "Visualisasi Data"] },
@@ -309,7 +309,7 @@ export const PRODI_LIST = [
   { id: "kehutanan-s1", name: "Kehutanan", facultyId: "fkl", icon: "🌲" },
   { id: "biologi-s1", name: "Biologi", facultyId: "fst", icon: "🔬" },
   { id: "kimia-s1", name: "Kimia", facultyId: "fst", icon: "🧪" },
-  { id: "data-sains-s1", name: "Data Sains", facultyId: "fst", icon: "💻" },
+  { id: "data-sains-s1", name: "Sains Data", facultyId: "fst", icon: "💻" },
   { id: "magister-manajemen-s2", name: "Magister Manajemen", facultyId: "pps", icon: "🎓" },
   { id: "magister-agribisnis-s2", name: "Magister Agribisnis", facultyId: "pps", icon: "🌾" },
   { id: "magister-ekonomi-pembangunan-s2", name: "Magister Ekonomi Pembangunan", facultyId: "pps", icon: "🏛️" },

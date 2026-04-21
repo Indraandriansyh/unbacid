@@ -212,7 +212,7 @@ export const DEFAULT_LPPM_CONTENT: LppmContent = {
           title: "Sistem Irigasi Cerdas Berbasis IoT",
           subtitle: "Status: Prototipe Tahap 2 — Uji Lapang",
           description: "Sistem irigasi otomatis berbasis sensor kelembaban tanah dan cuaca yang terhubung ke platform cloud untuk pengelolaan air pertanian yang efisien.",
-          detail: "Inovasi ini dikembangkan oleh tim Prodi Agroteknologi dan Data Sains selama 18 bulan. Sistem terdiri dari: sensor kelembaban tanah (custom hardware), unit kontrol pompa berbasis ESP32, platform monitoring berbasis web, dan aplikasi mobile. Uji lapang di 3 lokasi (Ciampea, Leuwiliang, Dramaga) menunjukkan penghematan air 42% dan peningkatan produktivitas tanaman 28%. Sedang dalam proses penjajakan lisensi dengan PT Petrokimia Gresik.",
+          detail: "Inovasi ini dikembangkan oleh tim Prodi Agroteknologi dan Sains Data selama 18 bulan. Sistem terdiri dari: sensor kelembaban tanah (custom hardware), unit kontrol pompa berbasis ESP32, platform monitoring berbasis web, dan aplikasi mobile. Uji lapang di 3 lokasi (Ciampea, Leuwiliang, Dramaga) menunjukkan penghematan air 42% dan peningkatan produktivitas tanaman 28%. Sedang dalam proses penjajakan lisensi dengan PT Petrokimia Gresik.",
           icon: "💧",
           date: "2023-2024",
           tags: ["IoT", "Pertanian Cerdas", "Efisiensi Air"],
@@ -254,7 +254,7 @@ export const DEFAULT_LPPM_CONTENT: LppmContent = {
         {
           id: makeId(),
           title: "Model Prediksi Hasil Panen dengan Machine Learning",
-          subtitle: "Tim: Koordinator Program Data Sains",
+          subtitle: "Tim: Koordinator Program Sains Data",
           description: "Model prediktif menggunakan algoritma Random Forest dan LSTM untuk memprediksi hasil panen berdasarkan data cuaca, tanah, dan riwayat budidaya.",
           detail: "Model ini dilatih menggunakan dataset 5 tahun dari 120 petak sawah di Bogor dan sekitarnya. Akurasi prediksi mencapai 87% (RMSE 0.42 ton/ha) untuk komoditas padi dan jagung. Model telah diintegrasikan ke dalam aplikasi SiPetani sebagai fitur 'Prediksi Panen'. Paper ilmiah tentang model ini sedang dalam proses review di Journal of Agricultural Informatics (terindeks Scopus Q2).",
           icon: "🤖",
@@ -431,7 +431,7 @@ export const DEFAULT_LPPM_CONTENT: LppmContent = {
     },
     {
       id: makeId(),
-      title: "Pengantar Data Sains untuk Pertanian",
+      title: "Pengantar Sains Data untuk Pertanian",
       author: "Nina Ariesta, S.Pd., M.Si",
       year: "2024",
       coverUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400",
