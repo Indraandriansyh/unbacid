@@ -237,18 +237,18 @@ export function AboutTab() {
       return {
         ...defaultProfileContent,
         ...raw,
-        title: raw.about?.title ?? defaultProfileContent.title,
-        subtitle: raw.about?.subtitle ?? defaultProfileContent.subtitle,
-        historyText: raw.history?.subtitle ?? raw.historyText ?? defaultProfileContent.historyText,
-        visionText: raw.visionMission?.vision ?? raw.visionText ?? defaultProfileContent.visionText,
-        missions: Array.isArray(raw.visionMission?.missions)
-          ? raw.visionMission.missions
-          : Array.isArray(raw.missions)
-            ? raw.missions
+        title: raw.title ?? raw.about?.title ?? defaultProfileContent.title,
+        subtitle: raw.subtitle ?? raw.about?.subtitle ?? defaultProfileContent.subtitle,
+        historyText: raw.historyText ?? raw.history?.subtitle ?? defaultProfileContent.historyText,
+        visionText: raw.visionText ?? raw.visionMission?.vision ?? defaultProfileContent.visionText,
+        missions: Array.isArray(raw.missions)
+          ? raw.missions
+          : Array.isArray(raw.visionMission?.missions)
+            ? raw.visionMission.missions
             : defaultProfileContent.missions,
-        sideImage: raw.visionMission?.sideImage ?? raw.sideImage ?? defaultProfileContent.sideImage,
-        sideTitle: raw.visionMission?.sideTitle ?? raw.sideTitle ?? defaultProfileContent.sideTitle,
-        sideSubtitle: raw.visionMission?.sideSubtitle ?? raw.sideSubtitle ?? defaultProfileContent.sideSubtitle,
+        sideImage: raw.sideImage ?? raw.visionMission?.sideImage ?? defaultProfileContent.sideImage,
+        sideTitle: raw.sideTitle ?? raw.visionMission?.sideTitle ?? defaultProfileContent.sideTitle,
+        sideSubtitle: raw.sideSubtitle ?? raw.visionMission?.sideSubtitle ?? defaultProfileContent.sideSubtitle,
         facilities: Array.isArray(raw.facilities) ? raw.facilities : defaultProfileContent.facilities,
       };
     }

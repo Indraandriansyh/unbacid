@@ -101,18 +101,18 @@ export default function ProfileManagement() {
       return {
         ...defaultProfileContent,
         ...raw,
-        title: raw.about?.title ?? defaultProfileContent.title,
-        subtitle: raw.about?.subtitle ?? defaultProfileContent.subtitle,
-        historyText: raw.history?.subtitle ?? raw.historyText ?? defaultProfileContent.historyText,
-        visionText: raw.visionMission?.vision ?? raw.visionText ?? defaultProfileContent.visionText,
-        missions: Array.isArray(raw.visionMission?.missions)
-          ? raw.visionMission.missions
-          : Array.isArray(raw.missions)
-            ? raw.missions
+        title: raw.title ?? raw.about?.title ?? defaultProfileContent.title,
+        subtitle: raw.subtitle ?? raw.about?.subtitle ?? defaultProfileContent.subtitle,
+        historyText: raw.historyText ?? raw.history?.subtitle ?? defaultProfileContent.historyText,
+        visionText: raw.visionText ?? raw.visionMission?.vision ?? defaultProfileContent.visionText,
+        missions: Array.isArray(raw.missions)
+          ? raw.missions
+          : Array.isArray(raw.visionMission?.missions)
+            ? raw.visionMission.missions
             : defaultProfileContent.missions,
-        sideImage: raw.visionMission?.sideImage ?? raw.sideImage ?? defaultProfileContent.sideImage,
-        sideTitle: raw.visionMission?.sideTitle ?? raw.sideTitle ?? defaultProfileContent.sideTitle,
-        sideSubtitle: raw.visionMission?.sideSubtitle ?? raw.sideSubtitle ?? defaultProfileContent.sideSubtitle,
+        sideImage: raw.sideImage ?? raw.visionMission?.sideImage ?? defaultProfileContent.sideImage,
+        sideTitle: raw.sideTitle ?? raw.visionMission?.sideTitle ?? defaultProfileContent.sideTitle,
+        sideSubtitle: raw.sideSubtitle ?? raw.visionMission?.sideSubtitle ?? defaultProfileContent.sideSubtitle,
         facilities: normalizeFacilities(raw.facilities).length ? normalizeFacilities(raw.facilities) : defaultProfileContent.facilities,
       };
     }
@@ -127,16 +127,40 @@ export default function ProfileManagement() {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    if (isSettingsLoading) return;
     const data = settings.profileContent ? normalizeProfileContent(settings.profileContent) : defaultProfileContent;
     setProfileContent(data);
     setIsLoading(false);
-  }, [settings.profileContent, t.about]);
+  }, [settings.profileContent, isSettingsLoading]);
 
   const handleSaveProfile = async () => {
     try {
       setIsSaving(true);
-      await updateSettings("profileContent", profileContent);
+      const normalized = normalizeProfileContent(profileContent);
+      const payload = {
+        ...(settings.profileContent ?? {}),
+        ...normalized,
+        about: {
+          ...((settings.profileContent as any)?.about ?? {}),
+          title: normalized.title ?? "",
+          subtitle: normalized.subtitle ?? "",
+        },
+        history: {
+          ...((settings.profileContent as any)?.history ?? {}),
+          subtitle: normalized.historyText ?? "",
+        },
+        visionMission: {
+          ...((settings.profileContent as any)?.visionMission ?? {}),
+          vision: normalized.visionText ?? "",
+          missions: Array.isArray(normalized.missions) ? normalized.missions : [],
+          sideImage: normalized.sideImage ?? "",
+          sideTitle: normalized.sideTitle ?? "",
+          sideSubtitle: normalized.sideSubtitle ?? "",
+        },
+        facilities: normalizeFacilities(normalized.facilities),
+      };
+      await updateSettings("profileContent", payload);
+      setProfileContent(normalizeProfileContent(payload));
       toast({ title: "Berhasil", description: "Konten profil telah diperbarui." });
     } catch (error) {
       toast({ variant: "destructive", title: "Gagal menyimpan", description: "Terjadi kesalahan pada server." });
